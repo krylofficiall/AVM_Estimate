@@ -11,9 +11,10 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --black:#000;--white:#fff;--gray-50:#f9f9f9;--gray-100:#f0f0f0;
-  --gray-200:#e0e0e0;--gray-400:#a0a0a0;--gray-600:#555;--gray-800:#222;
+  --gray-200:#e0e0e0;--gray-300:#c0c0c0;--gray-400:#a0a0a0;--gray-600:#555;--gray-800:#222;
   --mono:'IBM Plex Mono',monospace;--sans:'Inter',sans-serif;
   --row-h:44px;
+  --range-min:#1a6b3a;--range-max:#8b1a1a;
 }
 html{font-size:14px;background:var(--white);color:var(--black)}
 body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column}
@@ -43,7 +44,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .btn-ghost:hover{background:var(--gray-100);color:var(--black)}
 
 /* MAIN LAYOUT */
-.main{flex:1;padding:32px;max-width:960px;margin:0 auto;width:100%}
+.main{flex:1;padding:32px;max-width:1100px;margin:0 auto;width:100%}
 
 /* PROJECT TITLE */
 .project-row{
@@ -91,6 +92,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
   text-transform:uppercase;color:var(--gray-400);padding:8px 10px;text-align:left;
 }
 .est-table th:not(:first-child){text-align:right}
+.est-table th.th-left{text-align:left}
 .est-table tbody tr{border-bottom:1px solid var(--gray-100);transition:background .08s}
 .est-table tbody tr:hover{background:var(--gray-50)}
 .est-table td{padding:0;height:var(--row-h);vertical-align:middle}
@@ -104,14 +106,23 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
   background:transparent;width:100%;color:var(--black);
 }
 .td-rate, .td-days, .td-qty, .td-price{text-align:right;padding:0 10px}
+.td-range-min,.td-range-max{text-align:right;padding:0 8px;width:110px}
+.td-range-min input,.td-range-max input{
+  font-family:var(--mono);font-size:12px;border:none;outline:none;
+  background:transparent;width:100%;text-align:right;
+}
+.td-range-min input{color:var(--range-min)}
+.td-range-max input{color:var(--range-max)}
 .td-rate input, .td-days input, .td-qty input, .td-price input{text-align:right}
 .td-rate input::-webkit-inner-spin-button,
 .td-days input::-webkit-inner-spin-button,
 .td-qty input::-webkit-inner-spin-button,
-.td-price input::-webkit-inner-spin-button{opacity:0}
+.td-price input::-webkit-inner-spin-button,
+.td-range-min input::-webkit-inner-spin-button,
+.td-range-max input::-webkit-inner-spin-button{opacity:0}
 .td-sum{
   font-family:var(--mono);font-size:13px;font-weight:500;
-  text-align:right;padding:0 10px;white-space:nowrap;min-width:120px;
+  text-align:right;padding:0 10px;white-space:nowrap;min-width:110px;
 }
 .td-sum.zero{color:var(--gray-300)}
 .td-action{width:28px;text-align:center;padding:0}
@@ -120,6 +131,10 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
   cursor:pointer;line-height:1;transition:color .1s;padding:4px;
 }
 .del-btn:hover{color:var(--black)}
+
+/* Range header labels */
+.th-range-min{color:#1a6b3a !important}
+.th-range-max{color:#8b1a1a !important}
 
 /* PM ROW */
 .pm-row td{background:var(--gray-50)}
@@ -157,10 +172,17 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .summary-row.grand{
   background:var(--black);border-bottom:none;
 }
+.summary-row.grand-range{
+  background:var(--gray-50);border-bottom:none;
+}
 .summary-label{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-600)}
 .summary-row.grand .summary-label{color:var(--gray-400)}
 .summary-value{font-family:var(--mono);font-size:15px;font-weight:600}
 .summary-row.grand .summary-value{color:var(--white);font-size:18px}
+.range-values{display:flex;gap:16px;align-items:center}
+.range-min-val{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--range-min)}
+.range-sep{font-family:var(--mono);font-size:11px;color:var(--gray-400)}
+.range-max-val{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--range-max)}
 .summary-thirds{
   display:grid;grid-template-columns:1fr 1fr 1fr;
   border-top:1.5px solid var(--black);
@@ -178,6 +200,88 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .bar-team{background:var(--black)}
 .bar-extra{background:var(--gray-600)}
 .bar-margin{background:var(--gray-300)}
+
+/* ===== SCOPE SECTIONS (разбивка по разделам) ===== */
+.scope-section-block{
+  border:1.5px solid var(--black);margin-bottom:20px;
+}
+.scope-section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;background:var(--black);
+  cursor:pointer;user-select:none;
+}
+.scope-section-title-input{
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  background:transparent;border:none;outline:none;
+  color:var(--white);letter-spacing:.06em;flex:1;
+}
+.scope-section-title-input::placeholder{color:rgba(255,255,255,.35)}
+.scope-section-cost{
+  font-family:var(--mono);font-size:13px;font-weight:600;color:var(--white);
+  margin-right:16px;white-space:nowrap;
+}
+.scope-section-cost-range{
+  font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);
+  margin-right:8px;white-space:nowrap;
+}
+.scope-del-btn{
+  font-size:18px;color:rgba(255,255,255,.4);background:none;border:none;
+  cursor:pointer;padding:0 4px;transition:color .1s;line-height:1;
+}
+.scope-del-btn:hover{color:var(--white)}
+.scope-body{padding:0}
+.scope-table{width:100%;border-collapse:collapse}
+.scope-table th{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--gray-400);
+  padding:8px 12px;text-align:left;border-bottom:1px solid var(--gray-200);
+}
+.scope-table th:not(:first-child){text-align:right}
+.scope-table td{height:40px;vertical-align:middle;border-bottom:1px solid var(--gray-100)}
+.scope-table tbody tr:hover{background:var(--gray-50)}
+.scope-td-spec{padding:0 12px;min-width:200px}
+.scope-td-spec select{
+  font-family:var(--mono);font-size:13px;border:none;outline:none;
+  background:transparent;color:var(--black);cursor:pointer;width:100%;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a0a0a0'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 4px center;
+  padding-right:18px;
+}
+.scope-td-days{width:100px;padding:0 12px;text-align:right}
+.scope-td-days input{
+  font-family:var(--mono);font-size:13px;border:none;outline:none;
+  background:transparent;width:100%;text-align:right;color:var(--black);
+}
+.scope-td-days input::-webkit-inner-spin-button{opacity:0}
+.scope-td-rate{width:100px;padding:0 12px;text-align:right;
+  font-family:var(--mono);font-size:12px;color:var(--gray-400)}
+.scope-td-sum{width:130px;padding:0 12px;text-align:right;
+  font-family:var(--mono);font-size:13px;font-weight:500}
+.scope-td-action{width:28px;text-align:center}
+.scope-total-row td{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  border-top:1.5px solid var(--black);padding:8px 12px;
+}
+.scope-total-row .scope-td-sum{font-size:13px}
+.scope-add-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:11px;color:var(--gray-400);
+  background:none;border:none;cursor:pointer;
+  padding:8px 12px;letter-spacing:.04em;transition:color .1s;
+  border-top:1px solid var(--gray-100);width:100%;
+}
+.scope-add-btn:hover{color:var(--black)}
+
+/* SCOPE SUMMARY */
+.scope-summary-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  border:1.5px solid var(--black);border-top:none;
+  padding:14px 20px;background:var(--gray-50);
+}
+.scope-summary-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400)}
+.scope-summary-val{font-family:var(--mono);font-size:16px;font-weight:600}
 
 /* FOOTER */
 footer{
@@ -233,19 +337,30 @@ footer{
       <thead>
         <tr>
           <th style="width:32px"></th>
-          <th>Специалист</th>
+          <th class="th-left">Специалист</th>
           <th style="text-align:right;width:110px">Ставка ₽/ч</th>
           <th style="text-align:right;width:110px;color:#a0a0a0">₽/день</th>
-          <th style="text-align:right;width:100px">Дней</th>
-          <th style="text-align:right;min-width:120px">Сумма</th>
+          <th style="text-align:right;width:90px">Дней</th>
+          <th class="th-range-min" style="text-align:right;width:110px">Мин (дн)</th>
+          <th class="th-range-max" style="text-align:right;width:110px">Макс (дн)</th>
+          <th style="text-align:right;min-width:110px">Сумма</th>
           <th style="width:28px"></th>
         </tr>
       </thead>
       <tbody id="team-body"></tbody>
       <tfoot>
         <tr class="section-total-row" id="team-total-row">
-          <td colspan="5" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — команда</td>
+          <td colspan="7" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — команда</td>
           <td class="td-sum" id="team-total-val">—</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="7" style="padding:4px 10px;font-family:var(--mono);font-size:10px;color:var(--gray-400)">Диапазон — команда</td>
+          <td style="text-align:right;padding:4px 10px;font-family:var(--mono);font-size:11px">
+            <span style="color:var(--range-min)" id="team-range-min">—</span>
+            <span style="color:var(--gray-400);margin:0 4px">—</span>
+            <span style="color:var(--range-max)" id="team-range-max">—</span>
+          </td>
           <td></td>
         </tr>
       </tfoot>
@@ -263,18 +378,29 @@ footer{
       <thead>
         <tr>
           <th style="width:32px"></th>
-          <th>Тип работ</th>
+          <th class="th-left">Тип работ</th>
           <th style="text-align:right;width:150px">Цена за ед. ₽</th>
-          <th style="text-align:right;width:100px">Кол-во</th>
-          <th style="text-align:right;min-width:120px">Сумма</th>
+          <th style="text-align:right;width:90px">Кол-во</th>
+          <th class="th-range-min" style="text-align:right;width:100px">Мин (кол)</th>
+          <th class="th-range-max" style="text-align:right;width:100px">Макс (кол)</th>
+          <th style="text-align:right;min-width:110px">Сумма</th>
           <th style="width:28px"></th>
         </tr>
       </thead>
       <tbody id="extra-body"></tbody>
       <tfoot>
         <tr class="section-total-row" id="extra-total-row">
-          <td colspan="4" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — доп. работы</td>
+          <td colspan="6" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — доп. работы</td>
           <td class="td-sum" id="extra-total-val">—</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="6" style="padding:4px 10px;font-family:var(--mono);font-size:10px;color:var(--gray-400)">Диапазон — доп. работы</td>
+          <td style="text-align:right;padding:4px 10px;font-family:var(--mono);font-size:11px">
+            <span style="color:var(--range-min)" id="extra-range-min">—</span>
+            <span style="color:var(--gray-400);margin:0 4px">—</span>
+            <span style="color:var(--range-max)" id="extra-range-max">—</span>
+          </td>
           <td></td>
         </tr>
       </tfoot>
@@ -300,6 +426,14 @@ footer{
       <span class="summary-label">Цена клиенту (×<span id="s-coef-lbl">3</span>)</span>
       <span class="summary-value" id="s-total">—</span>
     </div>
+    <div class="summary-row grand-range" style="border-bottom:1px solid var(--gray-200)">
+      <span class="summary-label" style="color:var(--gray-400)">Диапазон цены клиенту</span>
+      <div class="range-values">
+        <span class="range-min-val" id="s-range-min">—</span>
+        <span class="range-sep">–</span>
+        <span class="range-max-val" id="s-range-max">—</span>
+      </div>
+    </div>
     <div class="summary-thirds">
       <div class="third-cell">
         <div class="third-label">⅓ — ФОТ и затраты</div>
@@ -316,40 +450,64 @@ footer{
     </div>
   </div>
 
-  <div class="budget-bar" id="budget-bar">
+  <div class="budget-bar" id="budget-bar" style="margin-bottom:48px">
     <div class="bar-seg bar-team" id="bar-team" style="width:0%"></div>
     <div class="bar-seg bar-extra" id="bar-extra" style="width:0%"></div>
     <div class="bar-seg bar-margin" id="bar-margin" style="width:100%"></div>
   </div>
 
+  <!-- ===== SCOPE BREAKDOWN ===== -->
+  <div class="section" id="scope-section">
+    <div class="section-header" style="margin-bottom:20px">
+      <span class="section-title">Разбивка по разделам работ</span>
+      <span class="section-meta" id="scope-meta"></span>
+    </div>
+    <div id="scope-blocks"></div>
+    <button class="add-row-btn" style="border:1.5px dashed var(--gray-200);padding:12px 16px;width:100%;justify-content:center" onclick="addScopeBlock()">
+      + добавить раздел
+    </button>
+    <div class="scope-summary-bar" id="scope-summary-bar" style="display:none">
+      <span class="scope-summary-label">Итого по разделам</span>
+      <span class="scope-summary-val" id="scope-total-val">—</span>
+    </div>
+  </div>
+
 </main>
 
 <footer>
-  <span>AVM Технологии — Конструктор сметы</span>
-  <span>Ставки из внутренних смет. Синим — редактируемые поля.</span>
+  <span>AVM Технологии — Конструктор сметы v2</span>
+  <span>Синим — диапазон мин; красным — диапазон макс. Ставки из внутренних смет.</span>
 </footer>
 
 <script>
+// ============================================================
+// DATA
+// ============================================================
 const DEFAULT_TEAM = [
-  {name:'UX/UI дизайнер (DE)',      rate:2500, days:0},
-  {name:'3D моделер / аниматор',    rate:1875, days:0},
-  {name:'Разработчик (DEV)',         rate:3500, days:0},
-  {name:'Тестировщик (QA)',          rate:3000, days:0},
-  {name:'Методолог / сценарист',     rate:3000, days:0},
-  {name:'Звукорежиссёр',             rate:2500, days:0},
+  {name:'UX/UI дизайнер (DE)',      rate:2500, days:0, daysMin:0, daysMax:0},
+  {name:'3D моделер / аниматор',    rate:1875, days:0, daysMin:0, daysMax:0},
+  {name:'Разработчик (DEV)',         rate:3500, days:0, daysMin:0, daysMax:0},
+  {name:'Тестировщик (QA)',          rate:3000, days:0, daysMin:0, daysMax:0},
+  {name:'Методолог / сценарист',     rate:3000, days:0, daysMin:0, daysMax:0},
+  {name:'Звукорежиссёр',             rate:2500, days:0, daysMin:0, daysMax:0},
 ];
 
 const DEFAULT_EXTRAS = [
-  {name:'Съёмка 360° видео',        price:35000, qty:0},
-  {name:'Motion-ролик / анимация',  price:15000, qty:0},
-  {name:'Аудиофайл / озвучка',      price:800,   qty:0},
-  {name:'3D-модель объекта',         price:15000, qty:0},
-  {name:'Интерактивная механика',   price:25000, qty:0},
+  {name:'Съёмка 360° видео',        price:35000, qty:0, qtyMin:0, qtyMax:0},
+  {name:'Motion-ролик / анимация',  price:15000, qty:0, qtyMin:0, qtyMax:0},
+  {name:'Аудиофайл / озвучка',      price:800,   qty:0, qtyMin:0, qtyMax:0},
+  {name:'3D-модель объекта',         price:15000, qty:0, qtyMin:0, qtyMax:0},
+  {name:'Интерактивная механика',   price:25000, qty:0, qtyMin:0, qtyMax:0},
 ];
 
-let teamRows = [];
+let teamRows  = [];
 let extraRows = [];
+// scopeBlocks: [{title, lines:[{specIdx, days}]}]
+let scopeBlocks = [];
 
+// ============================================================
+// FORMATTERS
+// ============================================================
 function rub(n){
   if(!n && n!==0) return '—';
   return Math.round(n).toLocaleString('ru-RU') + ' ₽';
@@ -362,6 +520,9 @@ function rubShort(n){
   return v + ' ₽';
 }
 
+// ============================================================
+// TEAM BUILD
+// ============================================================
 function buildTeam(){
   const tbody = document.getElementById('team-body');
   tbody.innerHTML = '';
@@ -371,15 +532,18 @@ function buildTeam(){
     tr.dataset.idx = i;
     tr.innerHTML = `
       <td class="td-num">${String(i+1).padStart(2,'0')}</td>
-      <td class="td-name"><input type="text" value="${row.name}" placeholder="Специалист" oninput="updateTeam(${i},'name',this.value)"></td>
+      <td class="td-name"><input type="text" value="${esc(row.name)}" placeholder="Специалист" oninput="updateTeam(${i},'name',this.value)"></td>
       <td class="td-rate"><input type="number" value="${row.rate}" min="0" step="25" oninput="updateTeam(${i},'rate',+this.value);rebuildDayRate(${i},this.value)"></td>
       <td class="td-rate" style="text-align:right;padding:0 10px;font-family:var(--mono);font-size:12px;color:var(--gray-400)" id="dayrate-${i}">${dayRate.toLocaleString('ru-RU')} ₽</td>
       <td class="td-days"><input type="number" value="${row.days}" min="0" step="1" oninput="updateTeam(${i},'days',+this.value)"></td>
+      <td class="td-range-min"><input type="number" value="${row.daysMin||0}" min="0" step="1" placeholder="0" oninput="updateTeam(${i},'daysMin',+this.value)"></td>
+      <td class="td-range-max"><input type="number" value="${row.daysMax||0}" min="0" step="1" placeholder="0" oninput="updateTeam(${i},'daysMax',+this.value)"></td>
       <td class="td-sum" id="tsum-${i}"></td>
       <td class="td-action"><button class="del-btn" onclick="deleteTeamRow(${i})" title="Удалить">×</button></td>`;
     tbody.appendChild(tr);
   });
 
+  // PM auto row
   const pmTr = document.createElement('tr');
   pmTr.className = 'pm-row';
   pmTr.innerHTML = `
@@ -390,10 +554,12 @@ function buildTeam(){
     <td class="td-rate" style="font-family:var(--mono);font-size:12px;text-align:right;padding:0 10px" id="pm-rate-disp">—</td>
     <td style="font-family:var(--mono);font-size:12px;text-align:right;padding:0 10px;color:var(--gray-400)" id="pm-dayrate-disp">—</td>
     <td class="td-days" style="font-family:var(--mono);font-size:12px;text-align:right;padding:0 10px" id="pm-days-disp">—</td>
+    <td colspan="2" style="text-align:right;padding:0 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400)">авто %</td>
     <td class="td-sum" id="pm-sum-disp">—</td>
     <td></td>`;
   tbody.appendChild(pmTr);
   calcSums();
+  buildScopeBlocks(); // rebuild dropdowns when team changes
 }
 
 function rebuildDayRate(i, rateVal){
@@ -401,6 +567,9 @@ function rebuildDayRate(i, rateVal){
   if(el) el.textContent = Math.round((+rateVal||0)*8).toLocaleString('ru-RU') + ' ₽';
 }
 
+// ============================================================
+// EXTRAS BUILD
+// ============================================================
 function buildExtras(){
   const tbody = document.getElementById('extra-body');
   tbody.innerHTML = '';
@@ -408,9 +577,11 @@ function buildExtras(){
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="td-num">${String(i+1).padStart(2,'0')}</td>
-      <td class="td-name"><input type="text" value="${row.name}" placeholder="Тип работ" oninput="updateExtra(${i},'name',this.value)"></td>
+      <td class="td-name"><input type="text" value="${esc(row.name)}" placeholder="Тип работ" oninput="updateExtra(${i},'name',this.value)"></td>
       <td class="td-price"><input type="number" value="${row.price}" min="0" step="100" oninput="updateExtra(${i},'price',+this.value)"></td>
       <td class="td-qty"><input type="number" value="${row.qty}" min="0" step="1" oninput="updateExtra(${i},'qty',+this.value)"></td>
+      <td class="td-range-min"><input type="number" value="${row.qtyMin||0}" min="0" step="1" placeholder="0" oninput="updateExtra(${i},'qtyMin',+this.value)"></td>
+      <td class="td-range-max"><input type="number" value="${row.qtyMax||0}" min="0" step="1" placeholder="0" oninput="updateExtra(${i},'qtyMax',+this.value)"></td>
       <td class="td-sum" id="esum-${i}"></td>
       <td class="td-action"><button class="del-btn" onclick="deleteExtraRow(${i})" title="Удалить">×</button></td>`;
     tbody.appendChild(tr);
@@ -418,156 +589,464 @@ function buildExtras(){
   calcSums();
 }
 
-function updateTeam(i, field, val){
-  teamRows[i][field] = val;
-  calcSums();
-}
-function updateExtra(i, field, val){
-  extraRows[i][field] = val;
-  calcSums();
-}
-function addTeamRow(){
-  teamRows.push({name:'', rate:3000, days:0});
-  buildTeam();
-}
-function addExtraRow(){
-  extraRows.push({name:'', price:0, qty:0});
-  buildExtras();
-}
-function deleteTeamRow(i){
-  teamRows.splice(i,1);
-  buildTeam();
-}
-function deleteExtraRow(i){
-  extraRows.splice(i,1);
-  buildExtras();
+// ============================================================
+// SCOPE BLOCKS BUILD
+// ============================================================
+function buildScopeBlocks(){
+  const container = document.getElementById('scope-blocks');
+  container.innerHTML = '';
+  scopeBlocks.forEach((block, bi) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'scope-section-block';
+    wrap.id = `scope-block-${bi}`;
+
+    // Build header
+    const header = document.createElement('div');
+    header.className = 'scope-section-header';
+    header.innerHTML = `
+      <input class="scope-section-title-input" 
+             value="${esc(block.title)}" 
+             placeholder="Название раздела (напр. Создание локации №1)" 
+             oninput="updateScopeTitle(${bi}, this.value)"
+             onclick="event.stopPropagation()">
+      <span class="scope-section-cost-range" id="scope-range-${bi}"></span>
+      <span class="scope-section-cost" id="scope-cost-${bi}">—</span>
+      <button class="scope-del-btn" onclick="deleteScopeBlock(${bi})" title="Удалить раздел">×</button>`;
+    wrap.appendChild(header);
+
+    // Build body with table
+    const body = document.createElement('div');
+    body.className = 'scope-body';
+
+    const table = document.createElement('table');
+    table.className = 'scope-table';
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th class="th-left" style="width:40%">Специалист</th>
+          <th>Ставка ₽/ч</th>
+          <th>Рабочих дней</th>
+          <th>Сумма</th>
+          <th style="width:28px"></th>
+        </tr>
+      </thead>`;
+    const tbody = document.createElement('tbody');
+    tbody.id = `scope-tbody-${bi}`;
+
+    block.lines.forEach((line, li) => {
+      tbody.appendChild(buildScopeLine(bi, li, line));
+    });
+
+    // Total row
+    const tfoot = document.createElement('tfoot');
+    tfoot.innerHTML = `
+      <tr class="scope-total-row">
+        <td colspan="3" style="color:var(--gray-400)">Итого по разделу</td>
+        <td class="scope-td-sum" id="scope-sec-total-${bi}">—</td>
+        <td></td>
+      </tr>`;
+    table.appendChild(tbody);
+    table.appendChild(tfoot);
+    body.appendChild(table);
+
+    // Add line button
+    const addBtn = document.createElement('button');
+    addBtn.className = 'scope-add-btn';
+    addBtn.textContent = '+ добавить специалиста';
+    addBtn.onclick = () => addScopeLine(bi);
+    body.appendChild(addBtn);
+
+    wrap.appendChild(body);
+    container.appendChild(wrap);
+  });
+
+  calcScopeSums();
 }
 
+function buildScopeLine(bi, li, line){
+  const tr = document.createElement('tr');
+
+  // Build options for select
+  let opts = '<option value="-1">— выберите специалиста —</option>';
+  teamRows.forEach((r, idx) => {
+    const sel = (line.specIdx === idx) ? 'selected' : '';
+    opts += `<option value="${idx}" ${sel}>${esc(r.name||'Без имени')} (${(r.rate||0).toLocaleString('ru-RU')} ₽/ч)</option>`;
+  });
+
+  const dayRate = line.specIdx >= 0 && line.specIdx < teamRows.length
+    ? Math.round((teamRows[line.specIdx].rate||0)*8).toLocaleString('ru-RU') + ' ₽/д'
+    : '—';
+
+  tr.innerHTML = `
+    <td class="scope-td-spec">
+      <select onchange="updateScopeLine(${bi},${li},'specIdx',+this.value)">${opts}</select>
+    </td>
+    <td class="scope-td-rate" id="scope-rate-${bi}-${li}">${dayRate}</td>
+    <td class="scope-td-days">
+      <input type="number" value="${line.days||0}" min="0" step="0.5" 
+             oninput="updateScopeLine(${bi},${li},'days',+this.value)">
+    </td>
+    <td class="scope-td-sum" id="scope-line-sum-${bi}-${li}">—</td>
+    <td class="scope-td-action">
+      <button class="del-btn" onclick="deleteScopeLine(${bi},${li})" title="Удалить строку">×</button>
+    </td>`;
+  return tr;
+}
+
+// ============================================================
+// CALC FUNCTIONS
+// ============================================================
 function calcSums(){
-  const wdays = +document.getElementById('p-wdays').value || 22;
   const vatPct = +document.getElementById('p-vat').value || 0;
   const coef   = +document.getElementById('p-coef').value || 3;
   document.getElementById('s-coef-lbl').textContent = coef;
   document.getElementById('s-vat-label').textContent = `НДС ${vatPct}%`;
 
+  // ---- TEAM ----
   let teamCost = 0;
+  let teamCostMin = 0;
+  let teamCostMax = 0;
   let activeStaff = [];
 
   teamRows.forEach((row, i) => {
-    const sum = row.rate * 8 * (row.days || 0);
-    teamCost += sum;
-    if(row.days > 0) activeStaff.push(row.rate);
+    const rate    = row.rate  || 0;
+    const days    = row.days  || 0;
+    const daysMin = row.daysMin || 0;
+    const daysMax = row.daysMax || 0;
+
+    const sum    = rate * 8 * days;
+    const sumMin = rate * 8 * daysMin;
+    const sumMax = rate * 8 * daysMax;
+
+    teamCost    += sum;
+    teamCostMin += sumMin;
+    teamCostMax += sumMax;
+
+    if(days > 0) activeStaff.push(rate);
+
     const el = document.getElementById('tsum-'+i);
     if(el){
       el.textContent = sum > 0 ? rub(sum) : '—';
-      el.className = 'td-sum' + (sum===0?' zero':'');
+      el.className = 'td-sum' + (sum === 0 ? ' zero' : '');
     }
   });
 
+  // PM auto row
   const pmRate = activeStaff.length > 0
     ? Math.round(activeStaff.reduce((a,b)=>a+b,0) / activeStaff.length)
     : 0;
-
+  const activeDaysRows = teamRows.filter(r=>(r.days||0)>0);
   const totalDays = teamRows.reduce((s,r)=>s+(r.days||0), 0);
-  const pmDays = totalDays > 0 ? Math.max(1, Math.round(totalDays / teamRows.filter(r=>r.days>0).length || 0)) : 0;
+  const pmDays = activeDaysRows.length > 0 ? Math.max(1, Math.round(totalDays / activeDaysRows.length)) : 0;
   const pmCost = pmRate * 8 * pmDays;
   teamCost += pmCost;
 
-  const pmRateEl = document.getElementById('pm-rate-disp');
+  // PM min/max (apply same avg ratio)
+  const totalDaysMin = teamRows.reduce((s,r)=>s+(r.daysMin||0), 0);
+  const totalDaysMax = teamRows.reduce((s,r)=>s+(r.daysMax||0), 0);
+  const activeDaysMinRows = teamRows.filter(r=>(r.daysMin||0)>0);
+  const activeDaysMaxRows = teamRows.filter(r=>(r.daysMax||0)>0);
+  const pmDaysMin = activeDaysMinRows.length > 0 ? Math.max(1, Math.round(totalDaysMin / activeDaysMinRows.length)) : 0;
+  const pmDaysMax = activeDaysMaxRows.length > 0 ? Math.max(1, Math.round(totalDaysMax / activeDaysMaxRows.length)) : 0;
+  teamCostMin += pmRate * 8 * pmDaysMin;
+  teamCostMax += pmRate * 8 * pmDaysMax;
+
+  const pmRateEl    = document.getElementById('pm-rate-disp');
   const pmDayRateEl = document.getElementById('pm-dayrate-disp');
-  const pmDaysEl = document.getElementById('pm-days-disp');
-  const pmSumEl  = document.getElementById('pm-sum-disp');
-  if(pmRateEl) pmRateEl.textContent = pmRate > 0 ? pmRate.toLocaleString('ru-RU')+' ₽/ч' : '—';
+  const pmDaysEl    = document.getElementById('pm-days-disp');
+  const pmSumEl     = document.getElementById('pm-sum-disp');
+  if(pmRateEl)    pmRateEl.textContent    = pmRate > 0 ? pmRate.toLocaleString('ru-RU')+' ₽/ч' : '—';
   if(pmDayRateEl) pmDayRateEl.textContent = pmRate > 0 ? (pmRate*8).toLocaleString('ru-RU')+' ₽' : '—';
-  if(pmDaysEl) pmDaysEl.textContent = pmDays > 0 ? pmDays+' дн' : '—';
+  if(pmDaysEl)    pmDaysEl.textContent    = pmDays > 0 ? pmDays+' дн' : '—';
   if(pmSumEl){
     pmSumEl.textContent = pmCost > 0 ? rub(pmCost) : '—';
-    pmSumEl.className = 'td-sum' + (pmCost===0?' zero':'');
+    pmSumEl.className = 'td-sum' + (pmCost === 0 ? ' zero' : '');
   }
 
-  const activeTeam = teamRows.filter(r=>r.days>0).length;
-  document.getElementById('team-meta').textContent = activeTeam > 0
-    ? `${activeTeam} спец. + PM` : '';
+  const activeTeam = teamRows.filter(r=>(r.days||0)>0).length;
+  document.getElementById('team-meta').textContent = activeTeam > 0 ? `${activeTeam} спец. + PM` : '';
 
-  let extraCost = 0;
+  document.getElementById('team-total-val').textContent = teamCost > 0 ? rub(teamCost) : '—';
+
+  // Range display for team
+  const trmEl = document.getElementById('team-range-min');
+  const trmxEl = document.getElementById('team-range-max');
+  if(trmEl)  trmEl.textContent  = teamCostMin > 0 ? rub(teamCostMin) : '—';
+  if(trmxEl) trmxEl.textContent = teamCostMax > 0 ? rub(teamCostMax) : '—';
+
+  // ---- EXTRAS ----
+  let extraCost    = 0;
+  let extraCostMin = 0;
+  let extraCostMax = 0;
+
   extraRows.forEach((row, i) => {
-    const sum = (row.price||0) * (row.qty||0);
-    extraCost += sum;
+    const price  = row.price  || 0;
+    const qty    = row.qty    || 0;
+    const qtyMin = row.qtyMin || 0;
+    const qtyMax = row.qtyMax || 0;
+
+    const sum    = price * qty;
+    const sumMin = price * qtyMin;
+    const sumMax = price * qtyMax;
+
+    extraCost    += sum;
+    extraCostMin += sumMin;
+    extraCostMax += sumMax;
+
     const el = document.getElementById('esum-'+i);
     if(el){
       el.textContent = sum > 0 ? rub(sum) : '—';
-      el.className = 'td-sum' + (sum===0?' zero':'');
+      el.className = 'td-sum' + (sum === 0 ? ' zero' : '');
     }
   });
-  const activeExtra = extraRows.filter(r=>r.qty>0).length;
-  document.getElementById('extra-meta').textContent = activeExtra > 0
-    ? `${activeExtra} позиций` : '';
 
-  document.getElementById('team-total-val').textContent = teamCost > 0 ? rub(teamCost) : '—';
+  const activeExtra = extraRows.filter(r=>(r.qty||0)>0).length;
+  document.getElementById('extra-meta').textContent = activeExtra > 0 ? `${activeExtra} позиций` : '';
+
   document.getElementById('extra-total-val').textContent = extraCost > 0 ? rub(extraCost) : '—';
 
-  const base = teamCost + extraCost;
-  const vatAmt = base * (vatPct/100);
-  const withVat = base + vatAmt;
-  const total = withVat * coef;
-  const third = total / 3;
+  const ermEl  = document.getElementById('extra-range-min');
+  const ermxEl = document.getElementById('extra-range-max');
+  if(ermEl)  ermEl.textContent  = extraCostMin > 0 ? rub(extraCostMin) : '—';
+  if(ermxEl) ermxEl.textContent = extraCostMax > 0 ? rub(extraCostMax) : '—';
 
-  document.getElementById('s-base').textContent = rub(base);
-  document.getElementById('s-vat').textContent = rub(vatAmt);
+  // ---- SUMMARY ----
+  const base    = teamCost + extraCost;
+  const vatAmt  = base * (vatPct / 100);
+  const withVat = base + vatAmt;
+  const total   = withVat * coef;
+  const third   = total / 3;
+
+  // Range totals — apply same VAT+coef multiplier
+  const baseMin  = teamCostMin + extraCostMin;
+  const baseMax  = teamCostMax + extraCostMax;
+  const totalMin = (baseMin * (1 + vatPct/100)) * coef;
+  const totalMax = (baseMax * (1 + vatPct/100)) * coef;
+
+  document.getElementById('s-base').textContent     = rub(base);
+  document.getElementById('s-vat').textContent      = rub(vatAmt);
   document.getElementById('s-with-vat').textContent = rub(withVat);
-  document.getElementById('s-total').textContent = rub(total);
-  document.getElementById('s-t1').textContent = rub(third);
-  document.getElementById('s-t2').textContent = rub(third);
-  document.getElementById('s-t3').textContent = rub(third);
+  document.getElementById('s-total').textContent    = rub(total);
+  document.getElementById('s-t1').textContent       = rub(third);
+  document.getElementById('s-t2').textContent       = rub(third);
+  document.getElementById('s-t3').textContent       = rub(third);
+
+  const rangeMinEl = document.getElementById('s-range-min');
+  const rangeMaxEl = document.getElementById('s-range-max');
+  if(rangeMinEl) rangeMinEl.textContent = baseMin > 0 ? rub(totalMin) : '—';
+  if(rangeMaxEl) rangeMaxEl.textContent = baseMax > 0 ? rub(totalMax) : '—';
 
   if(total > 0){
     const tp = (teamCost/total)*100;
     const ep = (extraCost/total)*100;
-    const mp = 100-tp-ep;
-    document.getElementById('bar-team').style.width = tp+'%';
-    document.getElementById('bar-extra').style.width = ep+'%';
-    document.getElementById('bar-margin').style.width = Math.max(0,mp)+'%';
+    const mp = 100 - tp - ep;
+    document.getElementById('bar-team').style.width  = tp + '%';
+    document.getElementById('bar-extra').style.width = ep + '%';
+    document.getElementById('bar-margin').style.width = Math.max(0, mp) + '%';
   }
 
-  window._calcState = {base,vatAmt,withVat,total,third,teamCost,extraCost,pmRate,pmDays,pmCost,vatPct,coef};
+  window._calcState = {
+    base, vatAmt, withVat, total, third,
+    teamCost, extraCost, pmRate, pmDays, pmCost,
+    vatPct, coef,
+    teamCostMin, teamCostMax, extraCostMin, extraCostMax,
+    totalMin, totalMax
+  };
+
+  calcScopeSums();
+}
+
+function calcScopeSums(){
+  let scopeGrandTotal = 0;
+  scopeBlocks.forEach((block, bi) => {
+    let sectionTotal = 0;
+    block.lines.forEach((line, li) => {
+      let lineSum = 0;
+      if(line.specIdx >= 0 && line.specIdx < teamRows.length){
+        const rate = teamRows[line.specIdx].rate || 0;
+        const days = line.days || 0;
+        lineSum = rate * 8 * days;
+      }
+      sectionTotal += lineSum;
+
+      const sumEl = document.getElementById(`scope-line-sum-${bi}-${li}`);
+      if(sumEl){
+        sumEl.textContent = lineSum > 0 ? rub(lineSum) : '—';
+        sumEl.style.color = lineSum > 0 ? 'var(--black)' : 'var(--gray-300)';
+      }
+
+      // Update rate display
+      const rateEl = document.getElementById(`scope-rate-${bi}-${li}`);
+      if(rateEl){
+        if(line.specIdx >= 0 && line.specIdx < teamRows.length){
+          const r = teamRows[line.specIdx].rate || 0;
+          rateEl.textContent = r > 0 ? (r*8).toLocaleString('ru-RU')+' ₽/д' : '—';
+        } else {
+          rateEl.textContent = '—';
+        }
+      }
+    });
+
+    scopeGrandTotal += sectionTotal;
+
+    const secTotalEl = document.getElementById(`scope-sec-total-${bi}`);
+    if(secTotalEl) secTotalEl.textContent = sectionTotal > 0 ? rub(sectionTotal) : '—';
+
+    const costEl = document.getElementById(`scope-cost-${bi}`);
+    if(costEl) costEl.textContent = sectionTotal > 0 ? rub(sectionTotal) : '—';
+
+    // Range display for scope block (if team rows have min/max)
+    const rangeEl = document.getElementById(`scope-range-${bi}`);
+    if(rangeEl){
+      let blockMin = 0, blockMax = 0;
+      block.lines.forEach(line => {
+        if(line.specIdx >= 0 && line.specIdx < teamRows.length){
+          const r = teamRows[line.specIdx];
+          const rate = r.rate || 0;
+          const days = line.days || 0;
+          blockMin += rate * 8 * days * 0.8; // conservative: -20%
+          blockMax += rate * 8 * days * 1.2; // extended: +20%
+        }
+      });
+      rangeEl.textContent = (blockMin > 0 || blockMax > 0)
+        ? `(${rubShort(blockMin)} – ${rubShort(blockMax)})`
+        : '';
+    }
+  });
+
+  // Scope summary bar
+  const summaryBar = document.getElementById('scope-summary-bar');
+  const totalValEl = document.getElementById('scope-total-val');
+  if(scopeBlocks.length > 0){
+    summaryBar.style.display = 'flex';
+    totalValEl.textContent = scopeGrandTotal > 0 ? rub(scopeGrandTotal) : '—';
+  } else {
+    summaryBar.style.display = 'none';
+  }
+
+  document.getElementById('scope-meta').textContent = 
+    scopeBlocks.length > 0 ? `${scopeBlocks.length} разд.` : '';
 }
 
 function calc(){ calcSums(); }
 
-function clearAll(){
-  document.getElementById('projectName').value='';
-  teamRows = JSON.parse(JSON.stringify(DEFAULT_TEAM));
-  extraRows = JSON.parse(JSON.stringify(DEFAULT_EXTRAS));
+// ============================================================
+// MUTATORS — TEAM
+// ============================================================
+function updateTeam(i, field, val){
+  teamRows[i][field] = val;
+  // If name changed, rebuild scope blocks to update dropdowns
+  if(field === 'name' || field === 'rate'){
+    buildScopeBlocks();
+  } else {
+    calcSums();
+  }
+}
+function addTeamRow(){
+  teamRows.push({name:'', rate:3000, days:0, daysMin:0, daysMax:0});
   buildTeam();
+}
+function deleteTeamRow(i){
+  // Remap scope specIdx references
+  scopeBlocks.forEach(block => {
+    block.lines.forEach(line => {
+      if(line.specIdx === i)      line.specIdx = -1;
+      else if(line.specIdx > i)   line.specIdx -= 1;
+    });
+  });
+  teamRows.splice(i, 1);
+  buildTeam();
+}
+
+// ============================================================
+// MUTATORS — EXTRAS
+// ============================================================
+function updateExtra(i, field, val){
+  extraRows[i][field] = val;
+  calcSums();
+}
+function addExtraRow(){
+  extraRows.push({name:'', price:0, qty:0, qtyMin:0, qtyMax:0});
+  buildExtras();
+}
+function deleteExtraRow(i){
+  extraRows.splice(i, 1);
   buildExtras();
 }
 
+// ============================================================
+// MUTATORS — SCOPE
+// ============================================================
+function addScopeBlock(){
+  scopeBlocks.push({title:'', lines:[]});
+  buildScopeBlocks();
+}
+function deleteScopeBlock(bi){
+  scopeBlocks.splice(bi, 1);
+  buildScopeBlocks();
+}
+function updateScopeTitle(bi, val){
+  scopeBlocks[bi].title = val;
+  // No full rebuild needed — title is already in the input
+  calcScopeSums();
+}
+function addScopeLine(bi){
+  scopeBlocks[bi].lines.push({specIdx:-1, days:0});
+  buildScopeBlocks();
+}
+function deleteScopeLine(bi, li){
+  scopeBlocks[bi].lines.splice(li, 1);
+  buildScopeBlocks();
+}
+function updateScopeLine(bi, li, field, val){
+  scopeBlocks[bi].lines[li][field] = val;
+  calcScopeSums();
+}
+
+// ============================================================
+// CLEAR ALL
+// ============================================================
+function clearAll(){
+  document.getElementById('projectName').value = '';
+  teamRows  = JSON.parse(JSON.stringify(DEFAULT_TEAM));
+  extraRows = JSON.parse(JSON.stringify(DEFAULT_EXTRAS));
+  scopeBlocks = [];
+  buildTeam();
+  buildExtras();
+  buildScopeBlocks();
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function esc(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ============================================================
+// EXPORT XLSX
+// ============================================================
 function exportXLSX(){
-  // ── helpers ──────────────────────────────────────────────────────────
   const state  = window._calcState || {};
   const proj   = document.getElementById('projectName').value || 'Без названия';
   const vatPct = +document.getElementById('p-vat').value  || 5;
   const coef   = +document.getElementById('p-coef').value || 3;
   const note   = document.getElementById('p-note').value  || '';
 
-  // Style factories matching Прохоровское поле exactly
-  const GREEN   = '6AA84F';  // section header color from template
+  const GREEN   = '1a6b3a';
   const DARK    = '1F3864';
-  const LBLUE   = 'D6E4F7';
-  const BLUE_IN = '0070C0';  // input values (blue per industry standard)
+  const BLUE_IN = '0070C0';
+  const RED_IN  = '8b1a1a';
   const RUB_FMT = '#,##0" ₽";(#,##0" ₽");"-"';
 
-  const fnt = (opts={}) => Object.assign({name:'Arial',sz:11},opts);
+  const fnt  = (opts={}) => Object.assign({name:'Arial',sz:11},opts);
   const ALcenter = {horizontal:'center',vertical:'center'};
   const ALleft   = {horizontal:'left',  vertical:'center'};
   const ALright  = {horizontal:'right', vertical:'center'};
+  const thin     = {style:'thin',color:{rgb:'CCCCCC'}};
+  const bAll     = {top:thin,bottom:thin,left:thin,right:thin};
 
-  // thin border on all 4 sides
-  const thin = {style:'thin',color:{rgb:'CCCCCC'}};
-  const bAll = {top:thin,bottom:thin,left:thin,right:thin};
-  const bBot = {bottom:{style:'medium',color:{rgb:'000000'}}};
-
-  const cell = (v, opts={}) => {
+  const mkCell = (v, opts={}) => {
     const c = {v, t: typeof v==='number' ? 'n' : 's'};
     if(opts.f){ c.f = opts.f; c.t='n'; delete c.v; }
     if(opts.z) c.z = opts.z;
@@ -581,107 +1060,116 @@ function exportXLSX(){
     return c;
   };
 
-  // shorthand helpers
-  const HEAD  = v => cell(v,{bold:true, color:'FFFFFF', fill:DARK, al:ALcenter, border:bAll});
-  const SECT  = v => cell(v,{bold:true, color:GREEN,  al:ALleft});       // green section title
-  const THDR  = v => cell(v,{bold:true, al:ALleft,    border:bAll});     // table column header
-  const THDRR = v => cell(v,{bold:true, al:ALright,   border:bAll});
-  const INP   = (v,z) => cell(v,{color:BLUE_IN, z:z||RUB_FMT, border:bAll, al:ALright});  // blue input
-  const INPN  = v => cell(v,{color:BLUE_IN, z:'0', border:bAll, al:ALright});  // blue numeric (days)
-  const FORM  = (f,z) => cell(null,{f, z:z||RUB_FMT, border:bAll, al:ALright}); // formula cell
-  const PLAIN = (v,opts={}) => cell(v, Object.assign({border:bAll, al:ALleft}, opts));
-  const BOLD  = (v,opts={}) => cell(v, Object.assign({bold:true, border:bAll, al:ALleft}, opts));
-  const BLANKE = () => cell('',{border:bAll});
+  const HEAD   = v => mkCell(v,{bold:true, color:'FFFFFF', fill:DARK, al:ALcenter, border:bAll});
+  const SECT   = v => mkCell(v,{bold:true, color:GREEN, al:ALleft});
+  const THDR   = v => mkCell(v,{bold:true, al:ALleft,  border:bAll});
+  const THDRR  = v => mkCell(v,{bold:true, al:ALright, border:bAll});
+  const INP    = (v,z) => mkCell(v,{color:BLUE_IN, z:z||RUB_FMT, border:bAll, al:ALright});
+  const INPN   = v    => mkCell(v,{color:BLUE_IN, z:'0', border:bAll, al:ALright});
+  const INPR   = v    => mkCell(v,{color:RED_IN,  z:'0', border:bAll, al:ALright});
+  const FORM   = (f,z)=> mkCell(null,{f, z:z||RUB_FMT, border:bAll, al:ALright});
+  const PLAIN  = (v,opts={}) => mkCell(v, Object.assign({border:bAll, al:ALleft}, opts));
+  const BOLD   = (v,opts={}) => mkCell(v, Object.assign({bold:true, border:bAll, al:ALleft}, opts));
+  const BLANKE = () => mkCell('',{border:bAll});
   const BLANK  = () => '';
 
-  // ── Build worksheet data as array-of-arrays ───────────────────────
-  // We'll track row numbers manually; XLSX.utils.aoa_to_sheet is 0-indexed
-  // but we need exact row refs for formulas, so we build row-by-row.
+  // 7 columns: A=num, B=name, C=rate, D=dayrate, E=days, F=minDays, G=maxDays, H=sum
+  const COLS = 8;
+  const data = [];
 
-  const data = [];  // each element = array of 5 cells [A,B,C,D,E]
+  // Title
+  data.push([HEAD('АВМ Технологии — Смета на разработку'), HEAD(''),HEAD(''),HEAD(''),HEAD(''),HEAD(''),HEAD(''),HEAD('')]);
+  data.push([mkCell(`Проект: ${proj}`,{al:ALleft}), BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  data.push(Array(COLS).fill(BLANK()));
 
-  // Row 1: Title  (A1:E1 merged)
-  data.push([HEAD('АВМ Технологии — Смета на разработку'), HEAD(''), HEAD(''), HEAD(''), HEAD('')]);
-  // Row 2: Project name (A2:E2 merged)
-  data.push([cell(`Проект: ${proj}`,{al:ALleft}), BLANK(), BLANK(), BLANK(), BLANK()]);
-  // Row 3: blank spacer
-  data.push([BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  // ── SECTION 1: Команда ──────────────────────────────────────────
+  data.push([SECT('Команда'), BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  data.push([
+    THDR('№'), THDR('Специалист / Роль'),
+    THDRR('Ставка ₽/ч'), THDRR('₽/день'),
+    THDRR('Дней'),
+    mkCell('Мин (дн)',{bold:true, color:GREEN, al:ALright, border:bAll}),
+    mkCell('Макс (дн)',{bold:true, color:RED_IN, al:ALright, border:bAll}),
+    THDRR('Сумма, ₽')
+  ]);
 
-  // ── SECTION 1: Работы по проекту ─────────────────────────────────
-  // Row 4: section header (A4:E4 merged)
-  data.push([SECT('Работы по проекту'), BLANK(), BLANK(), BLANK(), BLANK()]);
-  // Row 5: column headers
-  data.push([THDR('№'), THDR('Специалист / Роль'), THDRR('Ставка / Процент'), THDRR('Дней'), THDRR('Сумма, ₽')]);
-
-  const TEAM_DATA_START = 6; // 1-indexed Excel row where first specialist goes
+  const TEAM_DATA_START = data.length + 1; // 1-indexed
   let excelRow = TEAM_DATA_START;
-
-  // Specialist rows
   const teamDataRows = [];
+
   teamRows.forEach((row, i) => {
     const rn = excelRow;
-    // C=rate (input/blue), D=days (input/blue), E=rate*8*days (formula)
+    // C=rate, D=rate*8, E=days, F=minDays, G=maxDays, H=rate*8*days
     data.push([
       PLAIN(`${i+1}.0`),
       PLAIN(row.name||''),
       INP(row.rate||0, '#,##0" ₽/ч"'),
+      FORM(`C${rn}*8`, '#,##0" ₽"'),
       INPN(row.days||0),
-      FORM(`C${rn}*D${rn}*8`)
+      INPN(row.daysMin||0),
+      INPR(row.daysMax||0),
+      FORM(`C${rn}*8*E${rn}`)
     ]);
     teamDataRows.push(rn);
     excelRow++;
   });
 
-  // PM row — percent formula
-  const pmPct  = state.pmPct  || 25;
-  const qaPct  = state.qaPct  || 15;
-  const pmRow  = excelRow;
-  // base ФОТ = SUM of all specialist E rows
-  const specRange = teamDataRows.length>0
-    ? `E${teamDataRows[0]}:E${teamDataRows[teamDataRows.length-1]}`
-    : 'E6:E6';
+  const pmRow = excelRow;
+  const specRange = teamDataRows.length > 0
+    ? `H${teamDataRows[0]}:H${teamDataRows[teamDataRows.length-1]}`
+    : 'H6:H6';
+  const pmPct = state.pmPct || 25;
   data.push([
     PLAIN(`${teamRows.length+1}.0`),
     PLAIN('Проектный менеджер + Звук'),
-    cell(`${pmPct}% от ФОТ`, {al:ALright, border:bAll}),
-    BLANKE(),
+    mkCell(`${pmPct}% от ФОТ`,{al:ALright, border:bAll}),
+    BLANKE(), BLANKE(), BLANKE(), BLANKE(),
     FORM(`SUM(${specRange})*${pmPct}/100`)
   ]);
   excelRow++;
 
-  const qaRow = excelRow;
-  data.push([
-    PLAIN(`${teamRows.length+2}.0`),
-    PLAIN('Общее тестирование (QA)'),
-    cell(`${qaPct}% от ФОТ`, {al:ALright, border:bAll}),
-    BLANKE(),
-    FORM(`SUM(${specRange})*${qaPct}/100`)
-  ]);
-  excelRow++;
-
-  // TEAM TOTAL row
+  // Team total (base days)
   const teamTotalRow = excelRow;
-  const allTeamRange = `E${TEAM_DATA_START}:E${qaRow}`;
+  const allTeamRange = `H${TEAM_DATA_START}:H${pmRow}`;
   data.push([
-    BOLD('Итого — разработка'),
-    BOLD(''), BOLD(''),
-    cell(null,{f:`SUM(D${TEAM_DATA_START}:D${pmRow-1})`, z:'0', bold:true, border:bAll, al:ALright}),
+    BOLD('Итого — команда'),BOLD(''),BOLD(''),BOLD(''),BOLD(''),BOLD(''),BOLD(''),
     FORM(`SUM(${allTeamRange})`, RUB_FMT)
   ]);
-  data[data.length-1][0].s = Object.assign({}, data[data.length-1][0].s||{}, {font:{name:'Arial',bold:true,sz:11}});
   excelRow++;
 
-  // blank spacer
-  data.push([BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  // Team range row
+  const teamRangeRow = excelRow;
+  const minDaysRange = teamDataRows.length > 0 ? `F${teamDataRows[0]}:F${teamDataRows[teamDataRows.length-1]}` : 'F6:F6';
+  const maxDaysRange = teamDataRows.length > 0 ? `G${teamDataRows[0]}:G${teamDataRows[teamDataRows.length-1]}` : 'G6:G6';
+  data.push([
+    mkCell('Диапазон — команда',{al:ALleft, border:bAll, color:GREEN}),
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    mkCell('Мин →',{al:ALright, border:bAll, color:GREEN}),
+    mkCell(Math.round(state.teamCostMin||0),{z:RUB_FMT, border:bAll, al:ALright, color:GREEN})
+  ]);
+  excelRow++;
+  data.push([
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    mkCell('Макс →',{al:ALright, border:bAll, color:RED_IN}),
+    mkCell(Math.round(state.teamCostMax||0),{z:RUB_FMT, border:bAll, al:ALright, color:RED_IN})
+  ]);
   excelRow++;
 
-  // ── SECTION 2: Дополнительные работы ─────────────────────────────
+  data.push(Array(COLS).fill(BLANK()));
+  excelRow++;
+
+  // ── SECTION 2: Дополнительные работы ────────────────────────────
   const extraSectRow = excelRow;
-  data.push([SECT('Дополнительные работы'), BLANK(), BLANK(), BLANK(), BLANK()]);
+  data.push([SECT('Дополнительные работы'), BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
   excelRow++;
-
-  // column headers
-  data.push([THDR('№'), THDR('Тип расходов'), THDRR('Цена за ед., ₽'), THDRR('Кол-во'), THDRR('Сумма, ₽')]);
+  data.push([
+    THDR('№'), THDR('Тип расходов'),
+    THDRR('Цена за ед., ₽'), THDRR('Кол-во'),
+    mkCell('Мин (кол)',{bold:true, color:GREEN, al:ALright, border:bAll}),
+    mkCell('Макс (кол)',{bold:true, color:RED_IN, al:ALright, border:bAll}),
+    BLANK(),
+    THDRR('Сумма, ₽')
+  ]);
   excelRow++;
 
   const EXTRA_DATA_START = excelRow;
@@ -693,110 +1181,163 @@ function exportXLSX(){
       PLAIN(row.name||''),
       INP(row.price||0),
       INPN(row.qty||0),
+      INPN(row.qtyMin||0),
+      INPR(row.qtyMax||0),
+      BLANKE(),
       FORM(`C${rn}*D${rn}`)
     ]);
     extraDataRows.push(rn);
     excelRow++;
   });
 
-  // EXTRAS TOTAL
   const extraTotalRow = excelRow;
-  const extraRange = extraDataRows.length>0
-    ? `E${EXTRA_DATA_START}:E${extraDataRows[extraDataRows.length-1]}`
-    : `E${EXTRA_DATA_START}:E${EXTRA_DATA_START}`;
+  const extraRange = extraDataRows.length > 0
+    ? `H${EXTRA_DATA_START}:H${extraDataRows[extraDataRows.length-1]}`
+    : `H${EXTRA_DATA_START}:H${EXTRA_DATA_START}`;
   data.push([
-    BOLD('Итого — дополнительные работы'),
-    BOLD(''), BOLD(''),
-    cell(null,{f:`SUM(D${EXTRA_DATA_START}:D${excelRow-1})`, z:'0', bold:true, border:bAll, al:ALright}),
+    BOLD('Итого — дополнительные работы'),BOLD(''),BOLD(''),BOLD(''),BOLD(''),BOLD(''),BOLD(''),
     FORM(`SUM(${extraRange})`)
   ]);
   excelRow++;
 
-  // blank spacer
-  data.push([BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  data.push([
+    mkCell('Диапазон — доп. работы',{al:ALleft, border:bAll, color:GREEN}),
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    mkCell('Мин →',{al:ALright, border:bAll, color:GREEN}),
+    mkCell(Math.round(state.extraCostMin||0),{z:RUB_FMT, border:bAll, al:ALright, color:GREEN})
+  ]);
+  excelRow++;
+  data.push([
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    mkCell('Макс →',{al:ALright, border:bAll, color:RED_IN}),
+    mkCell(Math.round(state.extraCostMax||0),{z:RUB_FMT, border:bAll, al:ALright, color:RED_IN})
+  ]);
   excelRow++;
 
-  // ── SECTION 3: Итоговая стоимость ────────────────────────────────
+  data.push(Array(COLS).fill(BLANK()));
+  excelRow++;
+
+  // ── SECTION 3: Итоговая стоимость ──────────────────────────────
   const finalSectRow = excelRow;
-  data.push([SECT('Итоговая стоимость'), BLANK(), BLANK(), BLANK(), BLANK()]);
+  data.push([SECT('Итоговая стоимость'), BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
   excelRow++;
 
   const baseRow = excelRow;
   data.push([
-    cell('Себестоимость (ФОТ + контент)',{al:ALleft, border:bAll}),
-    BLANKE(), BLANKE(), BLANKE(),
-    FORM(`E${teamTotalRow}+E${extraTotalRow}`)
+    mkCell('Себестоимость (ФОТ + контент)',{al:ALleft, border:bAll}),
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    FORM(`H${teamTotalRow}+H${extraTotalRow}`)
   ]);
   excelRow++;
 
   const vatRow = excelRow;
   data.push([
-    cell(`НДС ${vatPct}%`,{al:ALleft, border:bAll}),
-    BLANKE(), BLANKE(), BLANKE(),
-    FORM(`E${baseRow}*${vatPct}/100`)
+    mkCell(`НДС ${vatPct}%`,{al:ALleft, border:bAll}),
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    FORM(`H${baseRow}*${vatPct}/100`)
   ]);
   excelRow++;
 
   const totalRow = excelRow;
   data.push([
-    cell(`Итоговая стоимость (×${coef})`,{bold:true, al:ALleft, border:bAll}),
-    BLANKE(), BLANKE(), BLANKE(),
-    cell(null,{f:`(E${baseRow}+E${vatRow})*${coef}`, z:RUB_FMT, bold:true, border:bAll, al:ALright})
+    mkCell(`Итоговая стоимость (×${coef})`,{bold:true, al:ALleft, border:bAll}),
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    mkCell(null,{f:`(H${baseRow}+H${vatRow})*${coef}`, z:RUB_FMT, bold:true, border:bAll, al:ALright})
+  ]);
+  excelRow++;
+
+  // Range total row
+  const rangeMin = Math.round(state.totalMin||0);
+  const rangeMax = Math.round(state.totalMax||0);
+  data.push([
+    mkCell(`Диапазон цены клиенту (×${coef})`,{al:ALleft, border:bAll}),
+    BLANKE(),BLANKE(),BLANKE(),BLANKE(),BLANKE(),
+    mkCell('Мин → Макс',{al:ALright, border:bAll}),
+    mkCell(`${rangeMin.toLocaleString('ru-RU')} ₽  –  ${rangeMax.toLocaleString('ru-RU')} ₽`,{al:ALright, border:bAll})
   ]);
   excelRow++;
 
   if(note){
-    data.push([cell(`Примечание: ${note}`,{al:ALleft, color:'888888'}), BLANK(), BLANK(), BLANK(), BLANK()]);
+    data.push([mkCell(`Примечание: ${note}`,{al:ALleft, color:'888888'}), BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
     excelRow++;
   }
 
-  // ── Assemble worksheet ───────────────────────────────────────────
+  // ── Scope breakdown sheet ──────────────────────────────────────
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(data);
-
-  // Column widths (matching template exactly)
-  ws['!cols'] = [{wch:4},{wch:41},{wch:21},{wch:11},{wch:19}];
-
-  // Row heights
+  ws['!cols'] = [{wch:3},{wch:36},{wch:14},{wch:12},{wch:9},{wch:10},{wch:10},{wch:18}];
   ws['!rows'] = [];
-  ws['!rows'][0] = {hpt:25.5};  // row 1
-  ws['!rows'][1] = {hpt:16.5};  // row 2
-  ws['!rows'][2] = {hpt:24.75}; // row 3 spacer
-  ws['!rows'][3] = {hpt:24.75}; // section header
-  ws['!rows'][extraSectRow-1]  = {hpt:24.75};
-  ws['!rows'][finalSectRow-1]  = {hpt:24.75};
+  ws['!rows'][0] = {hpt:25.5};
+  ws['!rows'][1] = {hpt:16.5};
 
-  // Merged cells — exactly like template
   const merges = [
-    {s:{r:0,c:0}, e:{r:0,c:4}},  // A1:E1 — title
-    {s:{r:1,c:0}, e:{r:1,c:4}},  // A2:E2 — project name
-    // Section headers span all 5 cols
-    {s:{r:3,c:0},               e:{r:3,c:4}},
-    {s:{r:extraSectRow-1,c:0},  e:{r:extraSectRow-1,c:4}},
-    {s:{r:finalSectRow-1,c:0},  e:{r:finalSectRow-1,c:4}},
-    // Total rows: A:C merged (label), D=days sum, E=sum
-    {s:{r:teamTotalRow-1,c:0},  e:{r:teamTotalRow-1,c:2}},
-    {s:{r:extraTotalRow-1,c:0}, e:{r:extraTotalRow-1,c:2}},
-    // Final summary: A:D merged
-    {s:{r:baseRow-1,c:0},  e:{r:baseRow-1,c:3}},
-    {s:{r:vatRow-1,c:0},   e:{r:vatRow-1,c:3}},
-    {s:{r:totalRow-1,c:0}, e:{r:totalRow-1,c:3}},
+    {s:{r:0,c:0}, e:{r:0,c:7}},
+    {s:{r:1,c:0}, e:{r:1,c:7}},
+    {s:{r:3,c:0}, e:{r:3,c:7}},
+    {s:{r:extraSectRow-1,c:0}, e:{r:extraSectRow-1,c:7}},
+    {s:{r:finalSectRow-1,c:0}, e:{r:finalSectRow-1,c:7}},
+    {s:{r:teamTotalRow-1,c:0},  e:{r:teamTotalRow-1,c:6}},
+    {s:{r:extraTotalRow-1,c:0}, e:{r:extraTotalRow-1,c:6}},
+    {s:{r:baseRow-1,c:0},  e:{r:baseRow-1,c:6}},
+    {s:{r:vatRow-1,c:0},   e:{r:vatRow-1,c:6}},
+    {s:{r:totalRow-1,c:0}, e:{r:totalRow-1,c:6}},
   ];
   ws['!merges'] = merges;
-
   XLSX.utils.book_append_sheet(wb, ws, 'Смета');
 
-  // ── Validation sheet ─────────────────────────────────────────────
-  const s2 = window._calcState||{};
-  const checkRows = [
-    [HEAD('Проверочный расчёт (контроль формул)'), HEAD(''), HEAD(''), HEAD('')],
-    [THDR('Показатель'), THDR('Из веб-приложения'), THDR('Из Excel (ручной пересчёт)'), THDR('Совпадение')],
-    [PLAIN('Себестоимость'), INP(Math.round(s2.base||0)), PLAIN('=Смета!E'+baseRow), cell(null,{f:`IF(ABS(B3-C3)<1,"✓","✗")`,al:ALcenter,border:bAll})],
-    [PLAIN('НДС'), INP(Math.round(s2.vatAmt||0)), PLAIN('=Смета!E'+vatRow), cell(null,{f:`IF(ABS(B4-C4)<1,"✓","✗")`,al:ALcenter,border:bAll})],
-    [PLAIN('Итоговая стоимость'), INP(Math.round(s2.total||0)), PLAIN('=Смета!E'+totalRow), cell(null,{f:`IF(ABS(B5-C5)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+  // Scope sheet
+  if(scopeBlocks.length > 0){
+    const sd = [];
+    sd.push([HEAD('Разбивка по разделам'), HEAD(''), HEAD(''), HEAD('')]);
+    sd.push([mkCell(`Проект: ${proj}`,{al:ALleft}), BLANK(), BLANK(), BLANK()]);
+    sd.push([BLANK(),BLANK(),BLANK(),BLANK()]);
+
+    let scoGrand = 0;
+    scopeBlocks.forEach((block, bi) => {
+      sd.push([SECT(`Раздел: ${block.title||'Без названия'}`), BLANK(), BLANK(), BLANK()]);
+      sd.push([THDR('Специалист'), THDRR('₽/день'), THDRR('Дней'), THDRR('Сумма')]);
+      const blockDataStart = sd.length + 1;
+      let blockSum = 0;
+      block.lines.forEach((line, li) => {
+        const specName = (line.specIdx >= 0 && line.specIdx < teamRows.length)
+          ? (teamRows[line.specIdx].name || '—') : '— не выбран —';
+        const rate = (line.specIdx >= 0 && line.specIdx < teamRows.length)
+          ? (teamRows[line.specIdx].rate || 0) * 8 : 0;
+        const days = line.days || 0;
+        const sum  = rate * days;
+        blockSum += sum;
+        sd.push([PLAIN(specName), mkCell(rate,{z:RUB_FMT,border:bAll,al:ALright}), INPN(days), mkCell(sum,{z:RUB_FMT,border:bAll,al:ALright})]);
+      });
+      scoGrand += blockSum;
+      sd.push([BOLD('Итого по разделу'), BOLD(''), BOLD(''), mkCell(blockSum,{z:RUB_FMT,border:bAll,al:ALright,bold:true})]);
+      sd.push([BLANK(),BLANK(),BLANK(),BLANK()]);
+    });
+
+    sd.push([mkCell('ИТОГО ПО ВСЕМ РАЗДЕЛАМ',{bold:true,fill:DARK,color:'FFFFFF',al:ALleft,border:bAll}), BLANK(), BLANK(),
+             mkCell(scoGrand,{z:RUB_FMT,bold:true,fill:DARK,color:'FFFFFF',border:bAll,al:ALright})]);
+
+    const ws2 = XLSX.utils.aoa_to_sheet(sd);
+    ws2['!cols'] = [{wch:36},{wch:14},{wch:10},{wch:18}];
+    ws2['!merges'] = [
+      {s:{r:0,c:0},e:{r:0,c:3}},
+      {s:{r:1,c:0},e:{r:1,c:3}},
+    ];
+    XLSX.utils.book_append_sheet(wb, ws2, 'Разделы');
+  }
+
+  // Validation sheet
+  const s2 = window._calcState || {};
+  const chk = [
+    [HEAD('Проверочный расчёт'), HEAD(''), HEAD(''), HEAD('')],
+    [THDR('Показатель'), THDR('Из веб-приложения'), THDR('Из Excel'), THDR('Совпадение')],
+    [PLAIN('Себестоимость'),        mkCell(Math.round(s2.base||0),{z:RUB_FMT,border:bAll,al:ALright}),  mkCell(null,{f:`Смета!H${baseRow}`,z:RUB_FMT,border:bAll,al:ALright}),  mkCell(null,{f:`IF(ABS(B3-C3)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+    [PLAIN('НДС'),                  mkCell(Math.round(s2.vatAmt||0),{z:RUB_FMT,border:bAll,al:ALright}), mkCell(null,{f:`Смета!H${vatRow}`,z:RUB_FMT,border:bAll,al:ALright}),   mkCell(null,{f:`IF(ABS(B4-C4)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+    [PLAIN('Итоговая стоимость'),   mkCell(Math.round(s2.total||0),{z:RUB_FMT,border:bAll,al:ALright}),  mkCell(null,{f:`Смета!H${totalRow}`,z:RUB_FMT,border:bAll,al:ALright}), mkCell(null,{f:`IF(ABS(B5-C5)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+    [PLAIN('Диапазон мин'),         mkCell(Math.round(s2.totalMin||0),{z:RUB_FMT,border:bAll,al:ALright}), BLANK(), BLANK()],
+    [PLAIN('Диапазон макс'),        mkCell(Math.round(s2.totalMax||0),{z:RUB_FMT,border:bAll,al:ALright}), BLANK(), BLANK()],
   ];
-  const ws3 = XLSX.utils.aoa_to_sheet(checkRows);
-  ws3['!cols'] = [{wch:30},{wch:22},{wch:22},{wch:14}];
+  const ws3 = XLSX.utils.aoa_to_sheet(chk);
+  ws3['!cols'] = [{wch:28},{wch:22},{wch:22},{wch:12}];
   ws3['!merges'] = [{s:{r:0,c:0},e:{r:0,c:3}}];
   XLSX.utils.book_append_sheet(wb, ws3, 'Проверка');
 
@@ -804,6 +1345,9 @@ function exportXLSX(){
   XLSX.writeFile(wb, fname);
 }
 
+// ============================================================
+// INIT
+// ============================================================
 clearAll();
 </script>
 </body>
