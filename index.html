@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Конструктор сметы — AVM (Обновленный)</title>
+<title>Конструктор сметы — AVM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -18,6 +18,7 @@
 html{font-size:14px;background:var(--white);color:var(--black)}
 body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column}
 
+/* HEADER */
 .app-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:0 32px;height:52px;border-bottom:1.5px solid var(--black);
@@ -27,6 +28,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .app-logo span{font-weight:400;color:var(--gray-600)}
 .header-actions{display:flex;gap:8px;align-items:center}
 
+/* BUTTONS */
 .btn{
   font-family:var(--mono);font-size:12px;font-weight:500;
   border:1.5px solid var(--black);background:var(--white);color:var(--black);
@@ -40,8 +42,10 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .btn-ghost{border-color:var(--gray-200);color:var(--gray-600)}
 .btn-ghost:hover{background:var(--gray-100);color:var(--black)}
 
+/* MAIN LAYOUT */
 .main{flex:1;padding:32px;max-width:960px;margin:0 auto;width:100%}
 
+/* PROJECT TITLE */
 .project-row{
   display:flex;align-items:baseline;gap:16px;margin-bottom:36px;
   padding-bottom:20px;border-bottom:1.5px solid var(--black);
@@ -55,8 +59,13 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .project-input:focus{border-bottom-color:var(--black)}
 .project-input::placeholder{color:var(--gray-200)}
 
-.params-bar{display:flex;gap:0;margin-bottom:32px;border:1.5px solid var(--black);}
-.param-cell{flex:1;padding:12px 16px;border-right:1.5px solid var(--black);}
+/* PARAMS BAR */
+.params-bar{
+  display:flex;gap:0;margin-bottom:32px;border:1.5px solid var(--black);
+}
+.param-cell{
+  flex:1;padding:12px 16px;border-right:1.5px solid var(--black);
+}
 .param-cell:last-child{border-right:none}
 .param-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--gray-400);text-transform:uppercase;margin-bottom:4px}
 .param-input{
@@ -65,6 +74,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 }
 .param-input::-webkit-inner-spin-button{opacity:0}
 
+/* SECTION */
 .section{margin-bottom:32px}
 .section-header{
   display:flex;align-items:center;justify-content:space-between;
@@ -73,6 +83,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .section-title{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
 .section-meta{font-family:var(--mono);font-size:11px;color:var(--gray-400)}
 
+/* TABLE */
 .est-table{width:100%;border-collapse:collapse}
 .est-table thead tr{border-bottom:1px solid var(--gray-200)}
 .est-table th{
@@ -83,15 +94,21 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 .est-table tbody tr{border-bottom:1px solid var(--gray-100);transition:background .08s}
 .est-table tbody tr:hover{background:var(--gray-50)}
 .est-table td{padding:0;height:var(--row-h);vertical-align:middle}
-.td-num{width:32px;font-family:var(--mono);font-size:10px;color:var(--gray-400);padding:0 10px;text-align:right;user-select:none;}
+.td-num{
+  width:32px;font-family:var(--mono);font-size:10px;color:var(--gray-400);
+  padding:0 10px;text-align:right;user-select:none;
+}
 .td-name{padding:0 10px;min-width:180px}
-.td-name input, .td-rate input, .td-days input, .td-qty input, .td-price input, .td-pct input{
+.td-name input, .td-rate input, .td-days input, .td-qty input, .td-price input{
   font-family:var(--mono);font-size:13px;border:none;outline:none;
   background:transparent;width:100%;color:var(--black);
 }
-.td-rate, .td-days, .td-qty, .td-price, .td-pct{text-align:right;padding:0 10px}
-.td-rate input, .td-days input, .td-qty input, .td-price input, .td-pct input{text-align:right; background: rgba(0,0,0,0.03); padding: 4px; border-radius: 4px;}
-.td-pct input {width: 50px; display: inline-block;}
+.td-rate, .td-days, .td-qty, .td-price{text-align:right;padding:0 10px}
+.td-rate input, .td-days input, .td-qty input, .td-price input{text-align:right}
+.td-rate input::-webkit-inner-spin-button,
+.td-days input::-webkit-inner-spin-button,
+.td-qty input::-webkit-inner-spin-button,
+.td-price input::-webkit-inner-spin-button{opacity:0}
 .td-sum{
   font-family:var(--mono);font-size:13px;font-weight:500;
   text-align:right;padding:0 10px;white-space:nowrap;min-width:120px;
@@ -104,19 +121,22 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 }
 .del-btn:hover{color:var(--black)}
 
-.overhead-row td{background:var(--gray-50)}
-.overhead-badge{
+/* PM ROW */
+.pm-row td{background:var(--gray-50)}
+.pm-badge{
   display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.08em;
-  text-transform:uppercase;border:1px solid var(--gray-300);
-  padding:1px 6px;color:var(--gray-500);margin-left:6px;vertical-align:middle;
+  text-transform:uppercase;border:1px solid var(--gray-200);
+  padding:1px 6px;color:var(--gray-400);margin-left:6px;vertical-align:middle;
 }
 
+/* SECTION TOTALS */
 .section-total-row td{
   font-family:var(--mono);font-size:12px;font-weight:500;
   border-top:1.5px solid var(--black);padding:10px 10px;
 }
 .section-total-row .td-sum{font-size:13px}
 
+/* ADD ROW BTN */
 .add-row-btn{
   display:flex;align-items:center;gap:6px;
   font-family:var(--mono);font-size:11px;color:var(--gray-400);
@@ -125,13 +145,18 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
 }
 .add-row-btn:hover{color:var(--black)}
 
-.summary{border:1.5px solid var(--black);margin-top:36px;}
+/* SUMMARY */
+.summary{
+  border:1.5px solid var(--black);margin-top:36px;
+}
 .summary-row{
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 20px;border-bottom:1px solid var(--gray-100);
 }
 .summary-row:last-child{border-bottom:none}
-.summary-row.grand{background:var(--black);border-bottom:none;}
+.summary-row.grand{
+  background:var(--black);border-bottom:none;
+}
 .summary-label{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-600)}
 .summary-row.grand .summary-label{color:var(--gray-400)}
 .summary-value{font-family:var(--mono);font-size:15px;font-weight:600}
@@ -140,17 +165,21 @@ body{font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column
   display:grid;grid-template-columns:1fr 1fr 1fr;
   border-top:1.5px solid var(--black);
 }
-.third-cell{padding:14px 20px;border-right:1px solid var(--gray-200);}
+.third-cell{
+  padding:14px 20px;border-right:1px solid var(--gray-200);
+}
 .third-cell:last-child{border-right:none}
 .third-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px}
 .third-value{font-family:var(--mono);font-size:13px;font-weight:500}
 
+/* BUDGET BAR */
 .budget-bar{height:4px;background:var(--gray-100);margin-top:24px;display:flex;overflow:hidden}
 .bar-seg{height:100%;transition:width .3s}
 .bar-team{background:var(--black)}
 .bar-extra{background:var(--gray-600)}
 .bar-margin{background:var(--gray-300)}
 
+/* FOOTER */
 footer{
   padding:16px 32px;border-top:1px solid var(--gray-200);
   font-family:var(--mono);font-size:10px;color:var(--gray-400);
@@ -169,6 +198,7 @@ footer{
 </header>
 
 <main class="main">
+
   <div class="project-row">
     <span class="project-eyebrow">Проект</span>
     <input class="project-input" id="projectName" type="text" placeholder="Введите название проекта" oninput="calc()">
@@ -193,9 +223,10 @@ footer{
     </div>
   </div>
 
+  <!-- TEAM SECTION -->
   <div class="section">
     <div class="section-header">
-      <span class="section-title">Команда (Специалисты)</span>
+      <span class="section-title">Команда</span>
       <span class="section-meta" id="team-meta"></span>
     </div>
     <table class="est-table" id="team-table">
@@ -211,67 +242,28 @@ footer{
         </tr>
       </thead>
       <tbody id="team-body"></tbody>
-    </table>
-    <button class="add-row-btn" onclick="addTeamRow()">+ добавить специалиста</button>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <span class="section-title">Менеджмент и Тестирование</span>
-      <span class="section-meta">Считается от ФОТ специалистов</span>
-    </div>
-    <table class="est-table">
-      <thead>
-        <tr>
-          <th style="width:32px"></th>
-          <th>Роль</th>
-          <th style="text-align:right;width:110px">% от ФОТ</th>
-          <th style="text-align:right;width:110px"></th>
-          <th style="text-align:right;width:100px"></th>
-          <th style="text-align:right;min-width:120px">Ручная сумма ₽</th>
-          <th style="width:28px"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="overhead-row">
-          <td class="td-num" style="color:var(--gray-300)">—</td>
-          <td class="td-name" style="font-family:var(--mono);font-size:12px;padding:0 10px">Проектный менеджер + Звукорежиссура <span class="overhead-badge">гибрид</span></td>
-          <td class="td-pct"><input type="number" id="pm-pct" value="25" oninput="updateOverhead('pm', 'pct', this.value)"> %</td>
-          <td></td>
-          <td></td>
-          <td class="td-price" style="padding-right: 10px;"><input type="number" id="pm-val" value="0" oninput="updateOverhead('pm', 'val', this.value)"></td>
-          <td></td>
-        </tr>
-        <tr class="overhead-row">
-          <td class="td-num" style="color:var(--gray-300)">—</td>
-          <td class="td-name" style="font-family:var(--mono);font-size:12px;padding:0 10px">Общее тестирование (QA) <span class="overhead-badge">гибрид</span></td>
-          <td class="td-pct"><input type="number" id="qa-pct" value="15" oninput="updateOverhead('qa', 'pct', this.value)"> %</td>
-          <td></td>
-          <td></td>
-          <td class="td-price" style="padding-right: 10px;"><input type="number" id="qa-val" value="0" oninput="updateOverhead('qa', 'val', this.value)"></td>
-          <td></td>
-        </tr>
-      </tbody>
       <tfoot>
         <tr class="section-total-row" id="team-total-row">
-          <td colspan="5" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — разработка + менеджмент</td>
+          <td colspan="5" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — команда</td>
           <td class="td-sum" id="team-total-val">—</td>
           <td></td>
         </tr>
       </tfoot>
     </table>
+    <button class="add-row-btn" onclick="addTeamRow()">+ добавить специалиста</button>
   </div>
 
+  <!-- EXTRAS SECTION -->
   <div class="section">
     <div class="section-header">
-      <span class="section-title">Доп. работы Подрядчиков и Командировки</span>
+      <span class="section-title">Дополнительные работы и контент</span>
       <span class="section-meta" id="extra-meta"></span>
     </div>
     <table class="est-table" id="extra-table">
       <thead>
         <tr>
           <th style="width:32px"></th>
-          <th>Тип расходов</th>
+          <th>Тип работ</th>
           <th style="text-align:right;width:150px">Цена за ед. ₽</th>
           <th style="text-align:right;width:100px">Кол-во</th>
           <th style="text-align:right;min-width:120px">Сумма</th>
@@ -281,7 +273,7 @@ footer{
       <tbody id="extra-body"></tbody>
       <tfoot>
         <tr class="section-total-row" id="extra-total-row">
-          <td colspan="4" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — доп. расходы</td>
+          <td colspan="4" style="padding:10px 10px;font-family:var(--mono);font-size:11px;color:var(--gray-400);letter-spacing:.06em;text-transform:uppercase">Итого — доп. работы</td>
           <td class="td-sum" id="extra-total-val">—</td>
           <td></td>
         </tr>
@@ -290,6 +282,7 @@ footer{
     <button class="add-row-btn" onclick="addExtraRow()">+ добавить позицию</button>
   </div>
 
+  <!-- SUMMARY -->
   <div class="summary" id="summary">
     <div class="summary-row">
       <span class="summary-label">Себестоимость (ФОТ + контент)</span>
@@ -333,31 +326,41 @@ footer{
 
 <footer>
   <span>AVM Технологии — Конструктор сметы</span>
-  <span>Ставки из внутренних смет и анализа рынка. Синим — редактируемые поля.</span>
+  <span>Ставки из внутренних смет. Синим — редактируемые поля.</span>
 </footer>
 
 <script>
 const DEFAULT_TEAM = [
-  {name:'Разработчик (Unreal Engine)', rate:4000, days:0},
-  {name:'Разработчик (Unity)', rate:3500, days:0},
-  {name:'Продакт-менеджер (Сценарий + UX/UI)', rate:3000, days:0},
-  {name:'3D моделер / аниматор', rate:3000, days:0}
+  {name:'UX/UI дизайнер (DE)',      rate:2500, days:0},
+  {name:'3D моделер / аниматор',    rate:1875, days:0},
+  {name:'Разработчик (DEV)',         rate:3500, days:0},
+  {name:'Тестировщик (QA)',          rate:3000, days:0},
+  {name:'Методолог / сценарист',     rate:3000, days:0},
+  {name:'Звукорежиссёр',             rate:2500, days:0},
 ];
 
 const DEFAULT_EXTRAS = [
-  {name:'Съёмка 360° видео', price:35000, qty:0},
-  {name:'Motion-ролик / анимация', price:15000, qty:0},
-  {name:'Аудиофайл / озвучка', price:800, qty:0},
-  {name:'3D-модель объекта', price:15000, qty:0},
-  {name:'Командировка', price:50000, qty:0},
+  {name:'Съёмка 360° видео',        price:35000, qty:0},
+  {name:'Motion-ролик / анимация',  price:15000, qty:0},
+  {name:'Аудиофайл / озвучка',      price:800,   qty:0},
+  {name:'3D-модель объекта',         price:15000, qty:0},
+  {name:'Интерактивная механика',   price:25000, qty:0},
 ];
 
 let teamRows = [];
 let extraRows = [];
-let pm = { pct: 25, val: 0, mode: 'pct' };
-let qa = { pct: 15, val: 0, mode: 'pct' };
 
-function rub(n){ return (!n && n!==0) ? '—' : Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
+function rub(n){
+  if(!n && n!==0) return '—';
+  return Math.round(n).toLocaleString('ru-RU') + ' ₽';
+}
+function rubShort(n){
+  if(!n && n!==0) return '—';
+  const v = Math.round(n);
+  if(v>=1000000) return (v/1000000).toFixed(2).replace(/\.?0+$/,'') + ' млн ₽';
+  if(v>=1000) return (v/1000).toFixed(1).replace(/\.0$/,'') + ' тыс ₽';
+  return v + ' ₽';
+}
 
 function buildTeam(){
   const tbody = document.getElementById('team-body');
@@ -365,16 +368,31 @@ function buildTeam(){
   teamRows.forEach((row, i) => {
     const dayRate = Math.round((row.rate||0)*8);
     const tr = document.createElement('tr');
+    tr.dataset.idx = i;
     tr.innerHTML = `
       <td class="td-num">${String(i+1).padStart(2,'0')}</td>
       <td class="td-name"><input type="text" value="${row.name}" placeholder="Специалист" oninput="updateTeam(${i},'name',this.value)"></td>
-      <td class="td-rate"><input type="number" value="${row.rate}" min="0" step="100" oninput="updateTeam(${i},'rate',+this.value);rebuildDayRate(${i},this.value)"></td>
-      <td class="td-rate" style="color:var(--gray-400)" id="dayrate-${i}">${dayRate.toLocaleString('ru-RU')} ₽</td>
+      <td class="td-rate"><input type="number" value="${row.rate}" min="0" step="25" oninput="updateTeam(${i},'rate',+this.value);rebuildDayRate(${i},this.value)"></td>
+      <td class="td-rate" style="text-align:right;padding:0 10px;font-family:var(--mono);font-size:12px;color:var(--gray-400)" id="dayrate-${i}">${dayRate.toLocaleString('ru-RU')} ₽</td>
       <td class="td-days"><input type="number" value="${row.days}" min="0" step="1" oninput="updateTeam(${i},'days',+this.value)"></td>
       <td class="td-sum" id="tsum-${i}"></td>
       <td class="td-action"><button class="del-btn" onclick="deleteTeamRow(${i})" title="Удалить">×</button></td>`;
     tbody.appendChild(tr);
   });
+
+  const pmTr = document.createElement('tr');
+  pmTr.className = 'pm-row';
+  pmTr.innerHTML = `
+    <td class="td-num" style="color:var(--gray-300)">—</td>
+    <td class="td-name" style="font-family:var(--mono);font-size:12px;padding:0 10px">
+      Проектный менеджер <span class="pm-badge">авто</span>
+    </td>
+    <td class="td-rate" style="font-family:var(--mono);font-size:12px;text-align:right;padding:0 10px" id="pm-rate-disp">—</td>
+    <td style="font-family:var(--mono);font-size:12px;text-align:right;padding:0 10px;color:var(--gray-400)" id="pm-dayrate-disp">—</td>
+    <td class="td-days" style="font-family:var(--mono);font-size:12px;text-align:right;padding:0 10px" id="pm-days-disp">—</td>
+    <td class="td-sum" id="pm-sum-disp">—</td>
+    <td></td>`;
+  tbody.appendChild(pmTr);
   calcSums();
 }
 
@@ -400,68 +418,95 @@ function buildExtras(){
   calcSums();
 }
 
-function updateTeam(i, field, val){ teamRows[i][field] = val; calcSums(); }
-function updateExtra(i, field, val){ extraRows[i][field] = val; calcSums(); }
-function addTeamRow(){ teamRows.push({name:'', rate:3000, days:0}); buildTeam(); }
-function addExtraRow(){ extraRows.push({name:'', price:0, qty:0}); buildExtras(); }
-function deleteTeamRow(i){ teamRows.splice(i,1); buildTeam(); }
-function deleteExtraRow(i){ extraRows.splice(i,1); buildExtras(); }
-
-function updateOverhead(type, field, val){
-  const obj = type === 'pm' ? pm : qa;
-  obj.mode = field;
-  if (field === 'pct') obj.pct = parseFloat(val) || 0;
-  if (field === 'val') obj.val = parseFloat(val) || 0;
+function updateTeam(i, field, val){
+  teamRows[i][field] = val;
   calcSums();
+}
+function updateExtra(i, field, val){
+  extraRows[i][field] = val;
+  calcSums();
+}
+function addTeamRow(){
+  teamRows.push({name:'', rate:3000, days:0});
+  buildTeam();
+}
+function addExtraRow(){
+  extraRows.push({name:'', price:0, qty:0});
+  buildExtras();
+}
+function deleteTeamRow(i){
+  teamRows.splice(i,1);
+  buildTeam();
+}
+function deleteExtraRow(i){
+  extraRows.splice(i,1);
+  buildExtras();
 }
 
 function calcSums(){
+  const wdays = +document.getElementById('p-wdays').value || 22;
   const vatPct = +document.getElementById('p-vat').value || 0;
   const coef   = +document.getElementById('p-coef').value || 3;
   document.getElementById('s-coef-lbl').textContent = coef;
   document.getElementById('s-vat-label').textContent = `НДС ${vatPct}%`;
 
-  let baseTeam = 0;
+  let teamCost = 0;
+  let activeStaff = [];
+
   teamRows.forEach((row, i) => {
     const sum = row.rate * 8 * (row.days || 0);
-    baseTeam += sum;
+    teamCost += sum;
+    if(row.days > 0) activeStaff.push(row.rate);
     const el = document.getElementById('tsum-'+i);
-    if(el){ el.textContent = sum > 0 ? rub(sum) : '—'; el.className = 'td-sum' + (sum===0?' zero':''); }
+    if(el){
+      el.textContent = sum > 0 ? rub(sum) : '—';
+      el.className = 'td-sum' + (sum===0?' zero':'');
+    }
   });
 
-  // Calculate PM and QA based on mode
-  if(pm.mode === 'pct') {
-    pm.val = Math.round(baseTeam * (pm.pct / 100));
-    document.getElementById('pm-val').value = pm.val;
-  } else {
-    pm.pct = baseTeam > 0 ? (pm.val / baseTeam * 100).toFixed(1) : 0;
-    document.getElementById('pm-pct').value = pm.pct;
+  const pmRate = activeStaff.length > 0
+    ? Math.round(activeStaff.reduce((a,b)=>a+b,0) / activeStaff.length)
+    : 0;
+
+  const totalDays = teamRows.reduce((s,r)=>s+(r.days||0), 0);
+  const pmDays = totalDays > 0 ? Math.max(1, Math.round(totalDays / teamRows.filter(r=>r.days>0).length || 0)) : 0;
+  const pmCost = pmRate * 8 * pmDays;
+  teamCost += pmCost;
+
+  const pmRateEl = document.getElementById('pm-rate-disp');
+  const pmDayRateEl = document.getElementById('pm-dayrate-disp');
+  const pmDaysEl = document.getElementById('pm-days-disp');
+  const pmSumEl  = document.getElementById('pm-sum-disp');
+  if(pmRateEl) pmRateEl.textContent = pmRate > 0 ? pmRate.toLocaleString('ru-RU')+' ₽/ч' : '—';
+  if(pmDayRateEl) pmDayRateEl.textContent = pmRate > 0 ? (pmRate*8).toLocaleString('ru-RU')+' ₽' : '—';
+  if(pmDaysEl) pmDaysEl.textContent = pmDays > 0 ? pmDays+' дн' : '—';
+  if(pmSumEl){
+    pmSumEl.textContent = pmCost > 0 ? rub(pmCost) : '—';
+    pmSumEl.className = 'td-sum' + (pmCost===0?' zero':'');
   }
 
-  if(qa.mode === 'pct') {
-    qa.val = Math.round(baseTeam * (qa.pct / 100));
-    document.getElementById('qa-val').value = qa.val;
-  } else {
-    qa.pct = baseTeam > 0 ? (qa.val / baseTeam * 100).toFixed(1) : 0;
-    document.getElementById('qa-pct').value = qa.pct;
-  }
-
-  const totalTeam = baseTeam + pm.val + qa.val;
-  document.getElementById('team-total-val').textContent = totalTeam > 0 ? rub(totalTeam) : '—';
-  
   const activeTeam = teamRows.filter(r=>r.days>0).length;
-  document.getElementById('team-meta').textContent = activeTeam > 0 ? `Специалистов: ${activeTeam}` : '';
+  document.getElementById('team-meta').textContent = activeTeam > 0
+    ? `${activeTeam} спец. + PM` : '';
 
   let extraCost = 0;
   extraRows.forEach((row, i) => {
     const sum = (row.price||0) * (row.qty||0);
     extraCost += sum;
     const el = document.getElementById('esum-'+i);
-    if(el){ el.textContent = sum > 0 ? rub(sum) : '—'; el.className = 'td-sum' + (sum===0?' zero':''); }
+    if(el){
+      el.textContent = sum > 0 ? rub(sum) : '—';
+      el.className = 'td-sum' + (sum===0?' zero':'');
+    }
   });
+  const activeExtra = extraRows.filter(r=>r.qty>0).length;
+  document.getElementById('extra-meta').textContent = activeExtra > 0
+    ? `${activeExtra} позиций` : '';
+
+  document.getElementById('team-total-val').textContent = teamCost > 0 ? rub(teamCost) : '—';
   document.getElementById('extra-total-val').textContent = extraCost > 0 ? rub(extraCost) : '—';
-  
-  const base = totalTeam + extraCost;
+
+  const base = teamCost + extraCost;
   const vatAmt = base * (vatPct/100);
   const withVat = base + vatAmt;
   const total = withVat * coef;
@@ -475,7 +520,16 @@ function calcSums(){
   document.getElementById('s-t2').textContent = rub(third);
   document.getElementById('s-t3').textContent = rub(third);
 
-  window._calcState = {base, vatAmt, withVat, total, third, totalTeam, extraCost, pmVal: pm.val, qaVal: qa.val, pmPct: pm.pct, qaPct: qa.pct, coef};
+  if(total > 0){
+    const tp = (teamCost/total)*100;
+    const ep = (extraCost/total)*100;
+    const mp = 100-tp-ep;
+    document.getElementById('bar-team').style.width = tp+'%';
+    document.getElementById('bar-extra').style.width = ep+'%';
+    document.getElementById('bar-margin').style.width = Math.max(0,mp)+'%';
+  }
+
+  window._calcState = {base,vatAmt,withVat,total,third,teamCost,extraCost,pmRate,pmDays,pmCost,vatPct,coef};
 }
 
 function calc(){ calcSums(); }
@@ -484,63 +538,270 @@ function clearAll(){
   document.getElementById('projectName').value='';
   teamRows = JSON.parse(JSON.stringify(DEFAULT_TEAM));
   extraRows = JSON.parse(JSON.stringify(DEFAULT_EXTRAS));
-  pm = { pct: 25, val: 0, mode: 'pct' };
-  qa = { pct: 15, val: 0, mode: 'pct' };
-  document.getElementById('pm-pct').value = 25;
-  document.getElementById('qa-pct').value = 15;
   buildTeam();
   buildExtras();
 }
 
 function exportXLSX(){
-  const state = window._calcState || {};
-  const proj = document.getElementById('projectName').value || 'Без названия';
-  const vatPct = +document.getElementById('p-vat').value || 5;
+  // ── helpers ──────────────────────────────────────────────────────────
+  const state  = window._calcState || {};
+  const proj   = document.getElementById('projectName').value || 'Без названия';
+  const vatPct = +document.getElementById('p-vat').value  || 5;
   const coef   = +document.getElementById('p-coef').value || 3;
+  const note   = document.getElementById('p-note').value  || '';
 
-  const wb = XLSX.utils.book_new();
-  const rows = [];
+  // Style factories matching Прохоровское поле exactly
+  const GREEN   = '6AA84F';  // section header color from template
+  const DARK    = '1F3864';
+  const LBLUE   = 'D6E4F7';
+  const BLUE_IN = '0070C0';  // input values (blue per industry standard)
+  const RUB_FMT = '#,##0" ₽";(#,##0" ₽");"-"';
 
-  const H = (v) => ({v, s:{font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1F3864'}}}});
-  const SH = (v) => ({v, s:{font:{bold:true,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'D6E4F7'}}}});
-  const RUB = (v) => ({v: Math.round(v||0), t:'n', z:'#,##0" ₽"'});
-  const BOLD = (v) => ({v, s:{font:{bold:true}}});
+  const fnt = (opts={}) => Object.assign({name:'Arial',sz:11},opts);
+  const ALcenter = {horizontal:'center',vertical:'center'};
+  const ALleft   = {horizontal:'left',  vertical:'center'};
+  const ALright  = {horizontal:'right', vertical:'center'};
 
-  rows.push([H(`АВМ Технологии — Смета на разработку`), '', '', '', '', '']);
-  rows.push([H(`Проект: ${proj}`), '', '', '', '', '']);
-  rows.push(['', '', '', '', '', '']);
+  // thin border on all 4 sides
+  const thin = {style:'thin',color:{rgb:'CCCCCC'}};
+  const bAll = {top:thin,bottom:thin,left:thin,right:thin};
+  const bBot = {bottom:{style:'medium',color:{rgb:'000000'}}};
 
-  rows.push([SH('№'), SH('Специалист / Роль'), SH('Ставка / Процент'), SH('Дней'), SH('Часов'), SH('Сумма, ₽')]);
-  
-  let baseTeam = 0;
+  const cell = (v, opts={}) => {
+    const c = {v, t: typeof v==='number' ? 'n' : 's'};
+    if(opts.f){ c.f = opts.f; c.t='n'; delete c.v; }
+    if(opts.z) c.z = opts.z;
+    const s = {};
+    if(opts.bold||opts.color||opts.sz)
+      s.font = fnt({bold:!!opts.bold, color:opts.color?{rgb:opts.color}:undefined, sz:opts.sz||11});
+    if(opts.fill) s.fill = {patternType:'solid', fgColor:{rgb:opts.fill}};
+    if(opts.al)   s.alignment = opts.al;
+    if(opts.border) s.border = opts.border;
+    if(Object.keys(s).length) c.s = s;
+    return c;
+  };
+
+  // shorthand helpers
+  const HEAD  = v => cell(v,{bold:true, color:'FFFFFF', fill:DARK, al:ALcenter, border:bAll});
+  const SECT  = v => cell(v,{bold:true, color:GREEN,  al:ALleft});       // green section title
+  const THDR  = v => cell(v,{bold:true, al:ALleft,    border:bAll});     // table column header
+  const THDRR = v => cell(v,{bold:true, al:ALright,   border:bAll});
+  const INP   = (v,z) => cell(v,{color:BLUE_IN, z:z||RUB_FMT, border:bAll, al:ALright});  // blue input
+  const INPN  = v => cell(v,{color:BLUE_IN, z:'0', border:bAll, al:ALright});  // blue numeric (days)
+  const FORM  = (f,z) => cell(null,{f, z:z||RUB_FMT, border:bAll, al:ALright}); // formula cell
+  const PLAIN = (v,opts={}) => cell(v, Object.assign({border:bAll, al:ALleft}, opts));
+  const BOLD  = (v,opts={}) => cell(v, Object.assign({bold:true, border:bAll, al:ALleft}, opts));
+  const BLANKE = () => cell('',{border:bAll});
+  const BLANK  = () => '';
+
+  // ── Build worksheet data as array-of-arrays ───────────────────────
+  // We'll track row numbers manually; XLSX.utils.aoa_to_sheet is 0-indexed
+  // but we need exact row refs for formulas, so we build row-by-row.
+
+  const data = [];  // each element = array of 5 cells [A,B,C,D,E]
+
+  // Row 1: Title  (A1:E1 merged)
+  data.push([HEAD('АВМ Технологии — Смета на разработку'), HEAD(''), HEAD(''), HEAD(''), HEAD('')]);
+  // Row 2: Project name (A2:E2 merged)
+  data.push([cell(`Проект: ${proj}`,{al:ALleft}), BLANK(), BLANK(), BLANK(), BLANK()]);
+  // Row 3: blank spacer
+  data.push([BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+
+  // ── SECTION 1: Работы по проекту ─────────────────────────────────
+  // Row 4: section header (A4:E4 merged)
+  data.push([SECT('Работы по проекту'), BLANK(), BLANK(), BLANK(), BLANK()]);
+  // Row 5: column headers
+  data.push([THDR('№'), THDR('Специалист / Роль'), THDRR('Ставка / Процент'), THDRR('Дней'), THDRR('Сумма, ₽')]);
+
+  const TEAM_DATA_START = 6; // 1-indexed Excel row where first specialist goes
+  let excelRow = TEAM_DATA_START;
+
+  // Specialist rows
+  const teamDataRows = [];
   teamRows.forEach((row, i) => {
-    const sum = (row.rate||0)*8*(row.days||0);
-    baseTeam += sum;
-    rows.push([i+1, row.name, row.rate||0, row.days||0, (row.days||0)*8, RUB(sum)]);
+    const rn = excelRow;
+    // C=rate (input/blue), D=days (input/blue), E=rate*8*days (formula)
+    data.push([
+      PLAIN(`${i+1}.0`),
+      PLAIN(row.name||''),
+      INP(row.rate||0, '#,##0" ₽/ч"'),
+      INPN(row.days||0),
+      FORM(`C${rn}*D${rn}*8`)
+    ]);
+    teamDataRows.push(rn);
+    excelRow++;
   });
-  
-  rows.push(['—', 'Проектный менеджер + Звук', `${state.pmPct}% от ФОТ`, '', '', RUB(state.pmVal)]);
-  rows.push(['—', 'Общее тестирование (QA)', `${state.qaPct}% от ФОТ`, '', '', RUB(state.qaVal)]);
-  rows.push([BOLD('Итого — разработка'), '', '', '', '', RUB(state.totalTeam)]);
-  rows.push(['', '', '', '', '', '']);
 
-  rows.push([SH('№'), SH('Тип расходов'), SH('Цена за ед., ₽'), SH('Кол-во'), SH(''), SH('Сумма, ₽')]);
+  // PM row — percent formula
+  const pmPct  = state.pmPct  || 25;
+  const qaPct  = state.qaPct  || 15;
+  const pmRow  = excelRow;
+  // base ФОТ = SUM of all specialist E rows
+  const specRange = teamDataRows.length>0
+    ? `E${teamDataRows[0]}:E${teamDataRows[teamDataRows.length-1]}`
+    : 'E6:E6';
+  data.push([
+    PLAIN(`${teamRows.length+1}.0`),
+    PLAIN('Проектный менеджер + Звук'),
+    cell(`${pmPct}% от ФОТ`, {al:ALright, border:bAll}),
+    BLANKE(),
+    FORM(`SUM(${specRange})*${pmPct}/100`)
+  ]);
+  excelRow++;
+
+  const qaRow = excelRow;
+  data.push([
+    PLAIN(`${teamRows.length+2}.0`),
+    PLAIN('Общее тестирование (QA)'),
+    cell(`${qaPct}% от ФОТ`, {al:ALright, border:bAll}),
+    BLANKE(),
+    FORM(`SUM(${specRange})*${qaPct}/100`)
+  ]);
+  excelRow++;
+
+  // TEAM TOTAL row
+  const teamTotalRow = excelRow;
+  const allTeamRange = `E${TEAM_DATA_START}:E${qaRow}`;
+  data.push([
+    BOLD('Итого — разработка'),
+    BOLD(''), BOLD(''),
+    cell(null,{f:`SUM(D${TEAM_DATA_START}:D${pmRow-1})`, z:'0', bold:true, border:bAll, al:ALright}),
+    FORM(`SUM(${allTeamRange})`, RUB_FMT)
+  ]);
+  data[data.length-1][0].s = Object.assign({}, data[data.length-1][0].s||{}, {font:{name:'Arial',bold:true,sz:11}});
+  excelRow++;
+
+  // blank spacer
+  data.push([BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  excelRow++;
+
+  // ── SECTION 2: Дополнительные работы ─────────────────────────────
+  const extraSectRow = excelRow;
+  data.push([SECT('Дополнительные работы'), BLANK(), BLANK(), BLANK(), BLANK()]);
+  excelRow++;
+
+  // column headers
+  data.push([THDR('№'), THDR('Тип расходов'), THDRR('Цена за ед., ₽'), THDRR('Кол-во'), THDRR('Сумма, ₽')]);
+  excelRow++;
+
+  const EXTRA_DATA_START = excelRow;
+  const extraDataRows = [];
   extraRows.forEach((row, i) => {
-    const sum = (row.price||0)*(row.qty||0);
-    rows.push([i+1, row.name, row.price||0, row.qty||0, '', RUB(sum)]);
+    const rn = excelRow;
+    data.push([
+      PLAIN(`${i+1}.0`),
+      PLAIN(row.name||''),
+      INP(row.price||0),
+      INPN(row.qty||0),
+      FORM(`C${rn}*D${rn}`)
+    ]);
+    extraDataRows.push(rn);
+    excelRow++;
   });
-  rows.push([BOLD('Итого — доп. расходы'), '', '', '', '', RUB(state.extraCost)]);
-  rows.push(['', '', '', '', '', '']);
 
-  rows.push([SH('ИТОГОВЫЙ РАСЧЁТ'), '', '', '', '', '']);
-  rows.push(['Себестоимость (ФОТ + контент)', '', '', '', '', RUB(state.base)]);
-  rows.push([`НДС ${vatPct}%`, '', '', '', '', RUB(state.vatAmt)]);
-  rows.push([{v:`Цена клиенту (×${coef})`, s:{font:{bold:true,sz:12}}}, '', '', '', '', {v:Math.round(state.total), t:'n', z:'#,##0" ₽"', s:{font:{bold:true}}}]);
+  // EXTRAS TOTAL
+  const extraTotalRow = excelRow;
+  const extraRange = extraDataRows.length>0
+    ? `E${EXTRA_DATA_START}:E${extraDataRows[extraDataRows.length-1]}`
+    : `E${EXTRA_DATA_START}:E${EXTRA_DATA_START}`;
+  data.push([
+    BOLD('Итого — дополнительные работы'),
+    BOLD(''), BOLD(''),
+    cell(null,{f:`SUM(D${EXTRA_DATA_START}:D${excelRow-1})`, z:'0', bold:true, border:bAll, al:ALright}),
+    FORM(`SUM(${extraRange})`)
+  ]);
+  excelRow++;
 
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols'] = [{wch:5},{wch:40},{wch:20},{wch:10},{wch:10},{wch:18}];
+  // blank spacer
+  data.push([BLANK(),BLANK(),BLANK(),BLANK(),BLANK()]);
+  excelRow++;
+
+  // ── SECTION 3: Итоговая стоимость ────────────────────────────────
+  const finalSectRow = excelRow;
+  data.push([SECT('Итоговая стоимость'), BLANK(), BLANK(), BLANK(), BLANK()]);
+  excelRow++;
+
+  const baseRow = excelRow;
+  data.push([
+    cell('Себестоимость (ФОТ + контент)',{al:ALleft, border:bAll}),
+    BLANKE(), BLANKE(), BLANKE(),
+    FORM(`E${teamTotalRow}+E${extraTotalRow}`)
+  ]);
+  excelRow++;
+
+  const vatRow = excelRow;
+  data.push([
+    cell(`НДС ${vatPct}%`,{al:ALleft, border:bAll}),
+    BLANKE(), BLANKE(), BLANKE(),
+    FORM(`E${baseRow}*${vatPct}/100`)
+  ]);
+  excelRow++;
+
+  const totalRow = excelRow;
+  data.push([
+    cell(`Итоговая стоимость (×${coef})`,{bold:true, al:ALleft, border:bAll}),
+    BLANKE(), BLANKE(), BLANKE(),
+    cell(null,{f:`(E${baseRow}+E${vatRow})*${coef}`, z:RUB_FMT, bold:true, border:bAll, al:ALright})
+  ]);
+  excelRow++;
+
+  if(note){
+    data.push([cell(`Примечание: ${note}`,{al:ALleft, color:'888888'}), BLANK(), BLANK(), BLANK(), BLANK()]);
+    excelRow++;
+  }
+
+  // ── Assemble worksheet ───────────────────────────────────────────
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Column widths (matching template exactly)
+  ws['!cols'] = [{wch:4},{wch:41},{wch:21},{wch:11},{wch:19}];
+
+  // Row heights
+  ws['!rows'] = [];
+  ws['!rows'][0] = {hpt:25.5};  // row 1
+  ws['!rows'][1] = {hpt:16.5};  // row 2
+  ws['!rows'][2] = {hpt:24.75}; // row 3 spacer
+  ws['!rows'][3] = {hpt:24.75}; // section header
+  ws['!rows'][extraSectRow-1]  = {hpt:24.75};
+  ws['!rows'][finalSectRow-1]  = {hpt:24.75};
+
+  // Merged cells — exactly like template
+  const merges = [
+    {s:{r:0,c:0}, e:{r:0,c:4}},  // A1:E1 — title
+    {s:{r:1,c:0}, e:{r:1,c:4}},  // A2:E2 — project name
+    // Section headers span all 5 cols
+    {s:{r:3,c:0},               e:{r:3,c:4}},
+    {s:{r:extraSectRow-1,c:0},  e:{r:extraSectRow-1,c:4}},
+    {s:{r:finalSectRow-1,c:0},  e:{r:finalSectRow-1,c:4}},
+    // Total rows: A:C merged (label), D=days sum, E=sum
+    {s:{r:teamTotalRow-1,c:0},  e:{r:teamTotalRow-1,c:2}},
+    {s:{r:extraTotalRow-1,c:0}, e:{r:extraTotalRow-1,c:2}},
+    // Final summary: A:D merged
+    {s:{r:baseRow-1,c:0},  e:{r:baseRow-1,c:3}},
+    {s:{r:vatRow-1,c:0},   e:{r:vatRow-1,c:3}},
+    {s:{r:totalRow-1,c:0}, e:{r:totalRow-1,c:3}},
+  ];
+  ws['!merges'] = merges;
+
   XLSX.utils.book_append_sheet(wb, ws, 'Смета');
-  XLSX.writeFile(wb, `Смета_${proj.replace(/[^а-яА-Яa-zA-Z0-9]/g,'_')}.xlsx`);
+
+  // ── Validation sheet ─────────────────────────────────────────────
+  const s2 = window._calcState||{};
+  const checkRows = [
+    [HEAD('Проверочный расчёт (контроль формул)'), HEAD(''), HEAD(''), HEAD('')],
+    [THDR('Показатель'), THDR('Из веб-приложения'), THDR('Из Excel (ручной пересчёт)'), THDR('Совпадение')],
+    [PLAIN('Себестоимость'), INP(Math.round(s2.base||0)), PLAIN('=Смета!E'+baseRow), cell(null,{f:`IF(ABS(B3-C3)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+    [PLAIN('НДС'), INP(Math.round(s2.vatAmt||0)), PLAIN('=Смета!E'+vatRow), cell(null,{f:`IF(ABS(B4-C4)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+    [PLAIN('Итоговая стоимость'), INP(Math.round(s2.total||0)), PLAIN('=Смета!E'+totalRow), cell(null,{f:`IF(ABS(B5-C5)<1,"✓","✗")`,al:ALcenter,border:bAll})],
+  ];
+  const ws3 = XLSX.utils.aoa_to_sheet(checkRows);
+  ws3['!cols'] = [{wch:30},{wch:22},{wch:22},{wch:14}];
+  ws3['!merges'] = [{s:{r:0,c:0},e:{r:0,c:3}}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'Проверка');
+
+  const fname = `Смета_${proj.replace(/[^а-яА-ЯёЁa-zA-Z0-9]/g,'_')}_AVM.xlsx`;
+  XLSX.writeFile(wb, fname);
 }
 
 clearAll();
